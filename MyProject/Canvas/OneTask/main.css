@@ -1,8 +1,4 @@
 canvas
 {
-    width: 400px;
-    height: 200px;
     border: 3px double black;
-    background-image: url("setka.png");
-    background: none;
 }

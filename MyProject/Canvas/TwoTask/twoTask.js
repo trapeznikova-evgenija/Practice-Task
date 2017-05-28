@@ -20,14 +20,14 @@ function createBee(x, y) {
   cx.stroke();
 }
 
-var k = 10;
-while (k < 130) {
+var k = 20;
+while (k < 580) {
 
-  for (var i = 20; i < 245; i += 35) {
+  for (var i = 20; i < 490; i += 35) {
     createBee(i, k);
   }
 
-  for ( i = 35; i < 260; i += 35) {
+  for ( i = 35; i < 505; i += 35) {
     createBee(i, k+15);
   }
   k += 30;
