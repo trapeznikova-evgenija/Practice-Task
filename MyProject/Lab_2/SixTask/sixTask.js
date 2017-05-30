@@ -17,7 +17,11 @@ function Calculator() {
   };
 
   this.div = function () {
-    result = this.firstOperand / this.secondOperand;
+    if (this.secondOperand != 0) {
+      result = this.firstOperand / this.secondOperand;
+    } else {
+      alert("Математически неправильная операция!");
+    }
   };
 
   this.sub = function () {
@@ -32,5 +36,5 @@ function Calculator() {
 
 var calculator = new Calculator();
 calculator.read();
-calculator.mul();
+calculator.div();
 calculator.getResult();

@@ -7,6 +7,9 @@ function Slider(slidesArray)
   this.nextSlide = function()
   {
     //TODO:: add checks for array out of range
+    if (this.activeSlide != undefined) {
+      return this.slidesArray[this.activeSlide];
+    }
 
     this.getActiveSlide().isActive = false;
     this.activeSlide += 1;
@@ -15,13 +18,25 @@ function Slider(slidesArray)
 
   this.prevSlide = function()
   {
-    //your code here
+
+    if (this.activeSlide = 0)
+    {
+      this.activeSlide = ((this.activeSlide++) % slidesArray.length);
+    }
+
+    if (this.activeSlide = 1)
+    {
+      this.activeSlide = ((this.activeSlide++) % slidesArray.length);
+    }
+
   };
 
   this.getActiveSlide = function()
   {
     //TODO:: add checks for array out of range
-    return this.slidesArray[this.activeSlide];
+    if (this.activeSlide != undefined) {
+      return this.slidesArray[this.activeSlide];
+    }
   };
 }
 
@@ -37,4 +52,6 @@ var slider = new Slider([slideFirst, slideSecond]);
 
 console.log(slider.getActiveSlide());
 slider.nextSlide();
+console.log(slider.getActiveSlide());
+slider.prevSlide();
 console.log(slider.getActiveSlide());
