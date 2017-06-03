@@ -1,20 +1,30 @@
+//var canvas = document.getElementById("canvas");
+//var context = canvas.getContext("2d");
 window.onload = function () {
 
-  var canvas = document.getElementById("SOS");
+  var canvas = document.getElementById("canvas");
   var context = canvas.getContext("2d");
 
   var CANVAS_WIDTH = 1000;
-  var CANVAS_HEIGHT = 600;
+  var CANVAS_HEIGHT = 800;
 
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
 
+  drawMap();
+  function drawMap() {
+    context.beginPath();
+    context.strokeStyle = "blue";
+    context.lineWidth = 3;
+    context.strokeRect(0, 0, 200, 400);
+    context.stroke();
+  }
 
   initTick(context);
 
 
   function initTick(context) {
-    var packman = new Packman(100, 100, 20, "#efef11");
+    var packman = new Packman(100, 150, 100, "#efef11");
     animationTick();
 
     function animationTick() {
@@ -23,8 +33,9 @@ window.onload = function () {
       drawPackman(context, packman);
       window.requestAnimationFrame(animationTick);
     }
+
   }
-  function drawPackmanFigure(x, y, radius, color, endAngle) {
+  function drawPackmanFigure(context, x, y, radius, color, endAngle) {
 
     var startPoint = {
       x: x + Math.cos(0) * radius,
@@ -106,4 +117,12 @@ window.onload = function () {
     Packman.isOpened = !Packman.isOpened;
   }
 
+
 };
+
+addEventListener("keydown", function (event) {
+  if (event.keyCode == 39) {
+    alert(event.type);
+  }
+
+});
