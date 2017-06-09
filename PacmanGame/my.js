@@ -13,7 +13,7 @@ canvas.height = CANVAS_HEIGHT;
 var circle = new Circle(100, 100, 0.03, 0.03, 10, "green");
 drawCircle(context, circle);
 function drawCircle() {
-  context.clearRect(0, 0, canvas.width, canvas.height);
+ // context.clearRect(0, 0, canvas.width, canvas.height);
   context.beginPath();
   context.fillStyle = circle.circleColor;
   context.arc(circle.corX, circle.corY, circle.circleRadius, 0, Math.PI * 2, true);
@@ -56,7 +56,8 @@ function drawCircle() {
   }
 
   addEventListener("keydown", handler);
-  requestAnimationFrame(drawCircle);
+  //requestAnimationFrame(drawCircle);
+  setTimeout(drawCircle, 10);
 }
 
 function Circle(x, y, dx, dy, radius, color) {  //конструктор для круга
