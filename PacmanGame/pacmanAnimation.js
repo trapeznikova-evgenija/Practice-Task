@@ -20,9 +20,10 @@ window.onload = function () {
      animationTick();
      function animationTick() {
        drawMaze("maze.png", 0, 0);
+
        packman.calcSmileAngle();
        drawPackman(context, packman);
-       //packman._x += 2;
+
        function handler(event) {
          packman.dx = 0;
          packman.dy = 0;
@@ -42,30 +43,16 @@ window.onload = function () {
              break;
          }
        }
-       
-       function redraw(packman) {
-         if (packman.dx != 0) {
-           packman._x += packman.dx;
-         }
 
-         if (packman.dy != 0 ) {
-            packman._y += packman.dy
-         }
-
-         if (packman._y > 593) {
-            alert('Ты победил!');
-         }
-       }
-
+       drawFood(context, "food1.png");
+       //eat(packman);
        redraw(packman);
-
 
        if (checkCollisions(packman)) {
          packman._x -= packman.dx;
          packman._y -= packman.dy;
          packman.dx = 0;
          packman.dy = 0;
-
        }
 
        addEventListener("keydown", handler);
@@ -73,6 +60,27 @@ window.onload = function () {
      }
 
    }
+
+
+/*  function eat(packman) {
+    context.beginPath();
+    context.fillStyle = "white";
+    context.rect(packman._x, packman._y, 15, 15);
+    context.fill();
+  } */
+
+  function redraw(packman) {
+
+    if (packman.dx != 0 || packman.dy != 0) {
+
+      packman._x += packman.dx;
+      packman._y += packman.dy
+    }
+
+    if (packman._y > 593) {
+      alert('Ты победил!');
+    }
+  }
 
   function drawMaze(mazeFile) {
 
@@ -86,14 +94,26 @@ window.onload = function () {
     imgMaze.src = mazeFile;
   }
 
-  function drawFood(foodFile) {
+  function drawFood(context, foodFile) {
     var imgFood = new Image();
-    imgFood.onload = function () {
-      context.drawImage(imgFood, 30, 40);
-    };
+      imgFood.onload = function () {
+        context.drawImage(imgFood, 330, 70);
+        context.drawImage(imgFood, 400, 334);
+        context.drawImage(imgFood, 195, 158);
+        context.drawImage(imgFood, 125, 246);
+        context.drawImage(imgFood, 140, 510);
+        context.drawImage(imgFood, 93, 400);
+        context.drawImage(imgFood, 230, 290);
+        context.drawImage(imgFood, 513, 180);
+        context.drawImage(imgFood, 294, 444);
+        context.drawImage(imgFood, 414, 444);
+        context.drawImage(imgFood, 400, 509);
+        context.drawImage(imgFood, 309, 540);
+      };
     imgFood.src = foodFile;
   }
-  
+
+
   function checkCollisions(packman) {
     var imageData = context.getImageData(packman._x - 1, packman._y - 1, 15 + 2, 15 + 2);
     var pixels = imageData.data;
