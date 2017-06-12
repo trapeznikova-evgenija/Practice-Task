@@ -1,4 +1,3 @@
-
 var keys = {
   SHIFT: 16,
   CTRL: 17,
