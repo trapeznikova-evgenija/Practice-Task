@@ -1,7 +1,12 @@
-var canvas;
-var context;
 var CANVAS_WIDTH = 1000;
 var CANVAS_HEIGHT = 500;
+
+var DIRECTION_MAZE = "image/maze.png";
+var DIRECTION_FOOD = "image/food.png";
+var DIRECTION_SCORE_TABLE = "image/scoreTable.png";
+
+var canvas;
+var context;
 
 window.onload = function () {
 
@@ -11,38 +16,38 @@ window.onload = function () {
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
 
-  initTick();
+  animationTick();
 };
 
 var packman = new Packman(267, 4, 8, "green", 0, 0);
 
-function initTick() {
-  animationTick();
-}
+
 
 function animationTick() {
 
-  drawMaze("image/maze.png", 0, 0);
-  drawFood(context, "image/food.png");
-
+  drawMaze(DIRECTION_MAZE, 0, 0);
+  drawFood(context, DIRECTION_FOOD);
+  drawScoreTable(DIRECTION_SCORE_TABLE, 10, 4);
   packman.calcSmileAngle();
+ // eat(packman);
   drawPackman(context, packman);
 
-  //eat(packman);
   redraw(packman);
+  packman.collisions();
 
-  if (checkCollisions(packman)) {
-    packman._x -= packman.dx;
-    packman._y -= packman.dy;
-    packman.dx = 0;
-    packman.dy = 0;
-  }
+  /* if (packman._x === 330) {
+    eat(packman);
+    context.beginPath();
+    context.fillStyle = "orange";
+    context.fillRect(0, 0, 120, 50);
+    context.fill();
+  } */
 
-  addEventListener("keydown", handler);
+
+  addEventListener("keydown", findDirection);
   window.requestAnimationFrame(animationTick);
 }
-
-function handler(event) {
+function findDirection(event) {
   packman.dx = 0;
   packman.dy = 0;
 
@@ -61,13 +66,12 @@ function handler(event) {
       break;
   }
 }
-
-/*  function eat(packman) {
+ function eat(packman) {
     context.beginPath();
-    context.fillStyle = "white";
-    context.rect(packman._x, packman._y, 15, 15);
+    context.fillStyle = "blue";
+    context.rect(packman._x, packman._y, 16, 15);
     context.fill();
-  } */
+  }
 
 function redraw(packman) {
 
@@ -77,6 +81,14 @@ function redraw(packman) {
     packman._y += packman.dy
 
   }
+}
+
+function drawScoreTable(scoreTableFile) {
+  var imgScore = new Image();
+  imgScore.onload = function () {
+    context.drawImage(imgScore, 5, 5);
+  };
+  imgScore.src = scoreTableFile
 }
 
 function drawMaze(mazeFile) {
@@ -165,8 +177,8 @@ function drawPackmanFigure(context, x, y, radius, color, endAngle) {
 }
 
 function Packman(x, y, radius, color, dx, dy) {
-  this.COLOR = color;
-  this.RADIUS = radius;
+  this._color = color;
+  this._radius = radius;
 
   this.dx = dx;
   this.dy = dy;
@@ -174,8 +186,8 @@ function Packman(x, y, radius, color, dx, dy) {
   this._x = x;
   this._y = y;
 
-  this._smileAngle = 1;
-  this._smileAngleStep = 5;
+  this._SMILE_ANGLE = 1;
+  this._SMILE_ANGLE_STEP = 5;
 
   this.getX = function () {
     return this._x;
@@ -186,16 +198,25 @@ function Packman(x, y, radius, color, dx, dy) {
   };
 
   this.getSmileAngle = function () {
-    return this._smileAngle;
+    return this._SMILE_ANGLE;
   };
 
   this.calcSmileAngle = function () {
 
-    this._smileAngle += this._smileAngleStep;
-    if ((this._smileAngle >= 90) || (this._smileAngle <= 1)) {
-      this._smileAngleStep = -this._smileAngleStep;
+    this._SMILE_ANGLE += this._SMILE_ANGLE_STEP;
+    if ((this._SMILE_ANGLE >= 90) || (this._SMILE_ANGLE <= 1)) {
+      this._SMILE_ANGLE_STEP = -this._SMILE_ANGLE_STEP;
     }
   };
+
+  this.collisions = function () {
+    if (checkCollisions(this)) {
+      this._x -= this.dx;
+      this._y -= this.dy;
+      this.dx = 0;
+      this.dy = 0;
+    }
+  }
 }
 
 function degToRad(deg) {
@@ -203,16 +224,15 @@ function degToRad(deg) {
   return inDeg;
 }
 
-function drawPackman(context, Packman) {
-  var cordX = Packman.getX() + Packman.RADIUS;
-  var cordY = Packman.getY() + Packman.RADIUS;
-  var smileAngle = degToRad(Packman.getSmileAngle());
+function drawPackman(context, packman) {
+  var cordX = packman.getX() + packman._radius;
+  var cordY = packman.getY() + packman._radius;
+  var smileAngle = degToRad(packman.getSmileAngle());
 
   context.translate(cordX, cordY);
   context.rotate(-smileAngle / 2);
-  drawPackmanFigure(context, 0, 0, Packman.RADIUS, Packman.COLOR, smileAngle);
+  drawPackmanFigure(context, 0, 0, packman._radius, packman._color, smileAngle);
   context.rotate(smileAngle / 2);
   context.translate(-cordX, -cordY);
-  Packman.isOpened = !Packman.isOpened;
 }
 
