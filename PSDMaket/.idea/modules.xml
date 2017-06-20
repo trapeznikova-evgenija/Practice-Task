@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/maket.iml" filepath="$PROJECT_DIR$/.idea/maket.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PSDMaket.iml" filepath="$PROJECT_DIR$/.idea/PSDMaket.iml" />
     </modules>
   </component>
 </project>
