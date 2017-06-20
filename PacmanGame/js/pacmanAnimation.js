@@ -3,10 +3,17 @@ var CANVAS_HEIGHT = 500;
 
 var DIRECTION_MAZE = "image/maze.png";
 var DIRECTION_FOOD = "image/food.png";
-var DIRECTION_SCORE_TABLE = "image/scoreTable.png";
 
 var canvas;
 var context;
+
+var gameStart = document.getElementById('game_start');
+var gameEnd = document.getElementById('game_over');
+
+var packman = new Packman(267, 4, 7, "green", 0, 0, 0);
+var setMelon = [{x: 330, y: 70, score: 0}, {x: 400, y: 334}, {x: 195, y: 158}, {x: 125, y: 246}, {x: 140, y: 510},
+                {x: 93, y: 400}, {x: 230, y: 290}, {x: 513, y: 180}, {x: 294, y: 444}, {x: 414, y: 444},
+                {x: 400, y: 509}, {x: 309, y: 540}];
 
 window.onload = function () {
 
@@ -19,62 +26,57 @@ window.onload = function () {
   animationTick();
 };
 
-var packman = new Packman(267, 4, 8, "green", 0, 0);
-
-
-
 function animationTick() {
 
+  gameEnd.style.display = 'none';
   drawMaze(DIRECTION_MAZE, 0, 0);
-  drawFood(context, DIRECTION_FOOD);
-  drawScoreTable(DIRECTION_SCORE_TABLE, 10, 4);
+  drawFood(context, DIRECTION_FOOD, setMelon, packman);
+  drawScore(packman, context);
   packman.calcSmileAngle();
- // eat(packman);
+
   drawPackman(context, packman);
 
   redraw(packman);
   packman.collisions();
 
-  /* if (packman._x === 330) {
-    eat(packman);
-    context.beginPath();
-    context.fillStyle = "orange";
-    context.fillRect(0, 0, 120, 50);
-    context.fill();
-  } */
-
-
   addEventListener("keydown", findDirection);
-  window.requestAnimationFrame(animationTick);
+
+  if ((packman._x > 288  && packman._x < 314) && (packman._y > 565 && packman._y < 590) && (packman._score === 12)) {
+    gameOver();
+  } else {
+    window.requestAnimationFrame(animationTick)
+  }
 }
+
+function noneStart() {
+  gameStart.style.display = 'none';
+}
+
+function gameOver() {
+  gameEnd.style.display = 'block';
+}
+
 function findDirection(event) {
   packman.dx = 0;
   packman.dy = 0;
 
   switch (event.keyCode) {
     case keys['RIGHT']:
-      packman.dx = 2;
+      packman.dx = 1.5;
       break;
     case keys['DOWN']:
-      packman.dy = 2;
+      packman.dy = 1.5;
       break;
     case keys['UP']:
-      packman.dy = -2;
+      packman.dy = -1.5;
       break;
     case keys['LEFT']:
-      packman.dx = -2;
+      packman.dx = -1.5;
       break;
   }
 }
- function eat(packman) {
-    context.beginPath();
-    context.fillStyle = "blue";
-    context.rect(packman._x, packman._y, 16, 15);
-    context.fill();
-  }
 
 function redraw(packman) {
-
   if (packman.dx !== 0 || packman.dy !== 0) {
 
     packman._x += packman.dx;
@@ -83,16 +85,36 @@ function redraw(packman) {
   }
 }
 
-function drawScoreTable(scoreTableFile) {
-  var imgScore = new Image();
-  imgScore.onload = function () {
-    context.drawImage(imgScore, 5, 5);
+function drawScore(packman, context) {
+    context.beginPath();
+    context.fillStyle = "#505050";
+    context.font = 'bold 30px sans-serif';
+    context.fillText('Score', 15, 39);
+    context.fillText(packman._score, 50, 68);
+}
+
+function drawFood(context, foodFile, setMelon, packman) {
+  var imgFood = new Image();
+  imgFood.onload = function () {
+
+    for (var i = 0; i != setMelon.length; i++) {   // рисуем все арбузы
+      context.drawImage(imgFood, setMelon[i].x, setMelon[i].y);
+    }
+
+    for (var k = 0; k != setMelon.length; k++) {
+      if ((setMelon[k].x != undefined) && (setMelon[k].y) != undefined) {
+        if ((packman._x >= setMelon[k].x && packman._x <= (setMelon[k].x + 20)) && (packman._y >= setMelon[k].y && packman._y <= (setMelon[k].y + 18))) {
+          delete setMelon[k].x;
+          delete setMelon[k].y;
+          packman._score += 1;
+        }
+      }
+    }
   };
-  imgScore.src = scoreTableFile
+  imgFood.src = foodFile;
 }
 
 function drawMaze(mazeFile) {
-
   var imgMaze = new Image();
   imgMaze.onload = function () {
 
@@ -104,30 +126,7 @@ function drawMaze(mazeFile) {
   imgMaze.src = mazeFile;
 }
 
-function drawFood(context, foodFile) {
-
-  var imgFood = new Image();
-  imgFood.onload = function () {
-
-    context.drawImage(imgFood, 330, 70);
-    context.drawImage(imgFood, 400, 334);
-    context.drawImage(imgFood, 195, 158);
-    context.drawImage(imgFood, 125, 246);
-    context.drawImage(imgFood, 140, 510);
-    context.drawImage(imgFood, 93, 400);
-    context.drawImage(imgFood, 230, 290);
-    context.drawImage(imgFood, 513, 180);
-    context.drawImage(imgFood, 294, 444);
-    context.drawImage(imgFood, 414, 444);
-    context.drawImage(imgFood, 400, 509);
-    context.drawImage(imgFood, 309, 540);
-
-  };
-  imgFood.src = foodFile;
-}
-
 function checkCollisions(packman) {
-
   var imageData = context.getImageData(packman._x - 1, packman._y - 1, 15 + 2, 15 + 2);
   var pixels = imageData.data;
 
@@ -176,7 +175,7 @@ function drawPackmanFigure(context, x, y, radius, color, endAngle) {
   context.closePath();
 }
 
-function Packman(x, y, radius, color, dx, dy) {
+function Packman(x, y, radius, color, dx, dy, score) {
   this._color = color;
   this._radius = radius;
 
@@ -188,6 +187,8 @@ function Packman(x, y, radius, color, dx, dy) {
 
   this._SMILE_ANGLE = 1;
   this._SMILE_ANGLE_STEP = 5;
+
+  this._score = score;
 
   this.getX = function () {
     return this._x;
@@ -236,3 +237,20 @@ function drawPackman(context, packman) {
   context.translate(-cordX, -cordY);
 }
 
+/* switch (frame) {
+ case 0:
+ context.drawImage(imgPackman, 0, 28.125, 28.125, 28.125, packman._x, packman._y, 15, 15);
+ frame = 1;
+ break;
+ case 1:
+ context.drawImage(imgPackman, 28.125, 28.125, 28.125, 28.125, packman._x, packman._y, 15, 15);
+ frame = 2;
+ break;
+ case 2:
+ context.drawImage(imgPackman, 56.25, 28.125, 28.125, 28.125, packman._x, packman._y, 15, 15);
+ frame = 3;
+ break;
+ case 3:
+ context.drawImage(imgPackman, 84.375, 28.125, 28.125, 28.125, packman._x, packman._y, 15, 15);
+ frame = 0;
+ } */

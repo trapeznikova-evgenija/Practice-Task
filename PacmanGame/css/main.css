@@ -1,3 +1,61 @@
 canvas {
     border: 3px double black;
+    display: block;
+    margin: 0 auto;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: url("../image/background.jpg")
+}
+
+#game_over {
+    background-color: rgba(0, 120, 199, 0.7);
+    width: 597px;
+    height: 598px;
+    float: left;
+    position: absolute;
+    margin-left: 385px;
+    margin-top: 3px;
+    text-align: center;
+}
+
+.game_over_element {
+    margin-top: 25%;
+    font-family: 'Patrick Hand SC', cursive;
+    font-size: 90px;
+}
+
+.game_over_score {
+    font-family: 'Patrick Hand SC', cursive;
+    font-size: 60px;
+}
+
+#game_start {
+    background-color: rgba(0, 120, 199, 0.7);
+    width: 597px;
+    height: 598px;
+    float: left;
+    position: absolute;
+    margin-left: 385px;
+    margin-top: 3px;
+    text-align: center;
+}
+
+.name_game {
+    font-family: 'Patrick Hand SC', cursive;
+    font-size: 60px;
+    margin-top: 30%;
+}
+
+.button {
+    margin-top: 10px;
+    font-family: 'Patrick Hand SC', cursive;
+    font-size: 30px;
+    border: none;
+    border-radius: 6px;
+    background-color: rgba(224, 213, 0, 1);
+    width: 100px;
+    border-bottom: 2px solid darkred;
 }
