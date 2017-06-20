@@ -4,8 +4,18 @@
   <meta charset="UTF-8">
   <title>Packman</title>
   <link type="text/css" rel="stylesheet" href="css/main.css"/>
+  <link href="https://fonts.googleapis.com/css?family=Patrick+Hand+SC" rel="stylesheet">
 </head>
 <body>
+  <div id="game_start">
+    <div class="name_game">Watermelon Pacman!</div>
+    <button class="button" type="button" onclick="noneStart()">Play</button>
+  </div>
+  <div id="game_over">
+    <div class="game_over_element">You won!</div>
+    <div class="game_over_score">Score 12</div>
+    <img src="image/game_over_image.png">
+  </div>
   <canvas id="canvas"></canvas>
   <script src="js/pacmanAnimation.js"></script>
   <script src="js/input.js"></script>
