@@ -369,6 +369,26 @@ a
 
     }
 
+    .blocks_open {
+        display: none;
+        transition: 1s;
+        opacity: 0;
+    }
+
+    .hidden_block
+    {
+        display: none;
+    }
+
+    .opacity_visible
+    {
+        opacity: 1;
+    }
+    .open_block
+    {
+        display: block;
+    }
+
     .for_inline
     {
         text-align: center;
@@ -419,6 +439,21 @@ a
 .lamp
 {
     background: url("../image/icon-lamp.png") no-repeat top 15px left;
+}
+
+.technology
+{
+    background: url("../image/icon_brackets.png") no-repeat top 15px left;
+}
+
+.like
+{
+    background: url("../image/icon_like.png") no-repeat top 15px left;
+}
+
+.voice
+{
+    background: url("../image/icon_hear.png") no-repeat top 15px left;
 }
 
 .latest_works
@@ -659,3 +694,47 @@ a
 {
   margin-top: 30px;
 }
+
+.button
+{
+    font-size: $size_button_one;
+    padding: 20px 55px 20px 55px;
+    width: 295px;
+    height: 62px;
+    display: block;
+    margin: 0 auto;
+    @extend .button_style;
+}
+
+.but
+{
+    margin-top: 45px;
+}
+
+.button_up_down
+{
+    opacity: 0.5;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    cursor: pointer;
+    display: none;
+
+    &:hover
+    {
+        opacity: 1;
+        transition: all 0.3s ease-out;
+    }
+
+    .open
+    {
+        display: block;
+    }
+
+}
+
+.emergence
+{
+    display: block;
+}
+
