@@ -13,24 +13,32 @@ body {
 
 #game_over {
     background-color: rgba(0, 120, 199, 0.7);
-    width: 597px;
-    height: 598px;
-    float: left;
-    position: absolute;
-    margin-left: 385px;
-    margin-top: 3px;
+    width: 822px;
+    height: 579px;
+    display: block;
+    margin: 0 auto;
     text-align: center;
+    margin-top: 20px;
 }
 
 .game_over_element {
-    margin-top: 25%;
     font-family: 'Patrick Hand SC', cursive;
     font-size: 90px;
+    position: relative;
+    top: 180px;
+
 }
 
 .game_over_score {
     font-family: 'Patrick Hand SC', cursive;
     font-size: 60px;
+    position: relative;
+    top: 180px;
+}
+
+.melon {
+    position: relative;
+    top: 190px;
 }
 
 #game_start {

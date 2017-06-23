@@ -4,7 +4,8 @@ var CANVAS_HEIGHT = 500;
 var DIRECTION_MAZE = "image/mazePackman.png";
 var DIRECTION_FOOD = "image/food.png";
 var DIRECTION_SPRITE = "image/game_sprite.png";
-var DIRECTION_SPRITE_PACKMAN = "image/game_sprite_forPackman.png";
+var DIRECTION_SPRITE_PACKMAN_RIGHT = "image/pacman_right.png";
+var DIRECTION_SPRITE_PACKMAN_LEFT = "image/pacman_left.png";
 
 var canvas;
 var context;
@@ -12,9 +13,10 @@ var context;
 var gameStart = document.getElementById('game_start');
 var gameEnd = document.getElementById('game_over');
 
-var packman = new Packman(26, 52, 0, 0, 0);
-var firstEnemy = new Enemy(431, 130, DIRECTION_SPRITE, 0, 199.5, 32, 32, 2, 0);
-var frame = 1, tick_count = 0;
+var packman = new Packman(26, 52, 0, 0, 0, 105, 105, 6, 4, DIRECTION_SPRITE_PACKMAN_RIGHT);
+var firstEnemy = new Enemy(431, 130, DIRECTION_SPRITE, 0, 199.5, 32, 32, 0, 1);
+var secondEnemy = new Enemy(296, 490, DIRECTION_SPRITE, 0, 112.5, 32, 32, 0, 0);
+var thirdEnemy = new Enemy(674, 289, DIRECTION_SPRITE, 0, 140.65, 32, 32, 0, 0);
 
 var setMelon = [{x: 70, y: 55}, {x: 135, y: 55}, {x: 200, y: 55}, {x: 265, y: 55}, {x: 330, y: 55}, {x: 284, y: 193},
                 {x: 284, y: 247}, {x: 216, y: 376}, {x: 156, y: 250}, {x: 232, y: 530}, {x: 152, y: 99}, {x: 23, y: 99},
@@ -26,6 +28,8 @@ var setMelon = [{x: 70, y: 55}, {x: 135, y: 55}, {x: 200, y: 55}, {x: 265, y: 55
                 {x: 88, y: 144}, {x: 153, y: 144}, {x: 218, y: 144}, {x: 283, y: 144}, {x: 340, y: 144}, {x: 331, y: 100},
                 {x: 349, y: 193}, {x: 414, y: 193}, {x: 479, y: 193}, {x: 438, y: 54}, {x: 503, y: 54}, {x: 568, y: 54},
                 {x: 633, y: 54}, {x: 698, y: 54}, {x: 705, y: 262}, {x: 640, y: 262}, {x: 580, y: 262}];
+
+var directionFirstEnemy = [{dx: -1, dy: 0}, {dx: 0, dy: -1}, {dx: 0, dy: 1}];
 
 window.onload = function () {
 
@@ -46,24 +50,26 @@ function animationTick() {
   drawFood(context, DIRECTION_FOOD, setMelon, packman);
   drawScore(packman, context);
 
-  if (tick_count > 2 ) {
-    drawPackman(DIRECTION_SPRITE_PACKMAN, packman, context, frame);
-    tick_count = 0;
-  }
-  tick_count += 1;
-  calculateFrame();
-
+  packman.update();
+  packman.draw(packman._x, packman._y);
   redraw(packman);
   packman.collisions();
-
 
   drawEnemy(context, firstEnemy);
   firstEnemy.redrawEnemy();
   firstEnemy.collisionsEnemy();
 
+  drawEnemy(context, secondEnemy);
+  secondEnemy.redrawEnemy();
+  secondEnemy.collisionsEnemy();
+
+  drawEnemy(context, thirdEnemy);
+  thirdEnemy.redrawEnemy();
+  thirdEnemy.collisionsEnemy();
+
   addEventListener("keydown", findDirection);
 
-  if ((packman._x > 288  && packman._x < 314) && (packman._y > 565 && packman._y < 590) && (packman._score === setMelon.length)) {
+  if (packman._score === setMelon.length) {
     gameOver();
   } else {
     window.requestAnimationFrame(animationTick)
@@ -72,11 +78,12 @@ function animationTick() {
 
 function noneStart() {
   gameStart.style.display = 'none';
-  document.getElementById('canvas').style.display = 'block';
+  canvas.style.display = 'block';
 }
 
 function gameOver() {
   gameEnd.style.display = 'block';
+  canvas.style.display = 'none';
 }
 
 function findDirection(event) {
@@ -85,18 +92,23 @@ function findDirection(event) {
 
   switch (event.keyCode) {
     case keys['RIGHT']:
-      packman.dx = 2;
+      packman.dx = 1.6;
+      packman.path = DIRECTION_SPRITE_PACKMAN_RIGHT;
+      packman.updateImg();
       break;
     case keys['DOWN']:
-      packman.dy = 2;
+      packman.dy = 1.6;
       break;
     case keys['UP']:
-      packman.dy = -2;
+      packman.dy = -1.6;
       break;
     case keys['LEFT']:
-      packman.dx = -2;
+      packman.dx = -1.6;
+      packman.path = DIRECTION_SPRITE_PACKMAN_LEFT;
+      packman.updateImg();
       break;
   }
+  console.log("packman.path", packman.path);
 }
 
 function redraw(packman) {
@@ -126,10 +138,9 @@ function drawFood(context, foodFile, setMelon, packman) {
 
     for (var k = 0; k != setMelon.length; k++) {
       if ((setMelon[k].x != undefined) && (setMelon[k].y) != undefined) {
-        if ((((packman._x) >= setMelon[k].x) && ((packman._x + 30) <= (setMelon[k].x + 24))) && (((packman._y) >= setMelon[k].y) && ((packman._y + 30) <= (setMelon[k].y + 18)))) {
+        if ((((packman._x) >= setMelon[k].x) && ((packman._x + 5) <= (setMelon[k].x + 23))) && (((packman._y + 8) >= (setMelon[k].y)) && ((packman._y) <= (setMelon[k].y + 18)))) {
           delete setMelon[k].x;
           delete setMelon[k].y;
-          console.log("wonder");
           packman._score += 1;
         }
       }
@@ -182,17 +193,7 @@ function checkCollisionsEnemy(firstEnemy) {
   return false;
 }
 
-function calculateFrame() {
-  
-    if (frame >= 4) {
-      frame = 1;
-      console.log("packman.frame ", frame)
-    } else {
-      frame += 1;
-      console.log("packman.frame ", frame)
-    }
-}
-function Packman(x, y, dx, dy, score) {
+function Packman(x, y, dx, dy, score, frameWidth, frameHeight, frameSpeed, endFrame, path) {
   
   this.dx = dx;
   this.dy = dy;
@@ -201,19 +202,9 @@ function Packman(x, y, dx, dy, score) {
   this._y = y;
   
   this._score = score;
-  
- // this.frame = 1;
-  
- /* this.calculateFrame = function () {
-    if (this.frame >= 4) {
-      this.frame = 1;
-      console.log("packman.frame ", this.frame)
-    } else {
-      this.frame += 1;
-      console.log("packman.frame ", this.frame)
-    }
-  }; */
-  
+
+  this.path = path;
+
   this.collisions = function () {
     if (checkCollisions(this)) {
       this._x -= this.dx;
@@ -221,6 +212,37 @@ function Packman(x, y, dx, dy, score) {
       this.dx = 0;
       this.dy = 0;
     }
+  };
+
+  var image = new Image();
+  var framesPerRow;
+
+  image.onload = function () {
+    framesPerRow = Math.floor(image.width / frameWidth)
+  };
+  image.src = this.path;
+
+  
+  this.updateImg = function () {
+    image.src = this.path;
+  };
+
+  var currentFrame = 0; //текущий кадр для отрисовки
+  var counter = 0; //счетчик ожидания
+
+  this.update = function () {
+
+    if (counter == (frameSpeed - 1)) {
+      currentFrame = (currentFrame + 1) % endFrame;
+    }
+    counter = (counter + 1) % frameSpeed
+  };
+
+  this.draw = function (x, y) {
+    var row = Math.floor(currentFrame / framesPerRow);
+    var col = Math.floor(currentFrame % framesPerRow);
+
+    context.drawImage(image, col * frameWidth, row * frameHeight, frameWidth, frameHeight, x, y, 23, 23)
   }
 }
 
@@ -249,11 +271,16 @@ function Enemy(x, y, enemyImg, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy) {
   this.dySpeed = dy;
 
   this.collisionsEnemy = function () {
+    var i = 0;
     if (checkCollisionsEnemy(this)) {
-      this._x -= this.dxSpeed;
-      this._y -= this.dySpeed;
-      this.dxSpeed = 0;
-      this.dySpeed = 0;
+        if (i === 0) {
+          this.dySpeed = directionFirstEnemy[0].dy;
+          this.dxSpeed = directionFirstEnemy[0].dx;
+        }
+        
+      this._x += this.dxSpeed;
+      this._y += this.dySpeed;
+
     }
   };
 
@@ -267,14 +294,3 @@ function Enemy(x, y, enemyImg, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy) {
     }
   }
 }
-
-function drawPackman(spriteFile, packman, context, frame) {
-  frame = frame ? frame - 1 : 0;
-
-  var animatePackman = new Image();
-    animatePackman.onload = function () {
-      context.drawImage(animatePackman, 196.875, 28.125 * frame, 28.125, 28.125, packman._x, packman._y, 30, 30);
-    };
-  animatePackman.src = spriteFile;
-}
-
