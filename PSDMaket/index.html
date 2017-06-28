@@ -9,6 +9,28 @@
     <link type="text/css" rel="stylesheet" href="css/main.css">
   </head>
   <body>
+  <div id="main_modal">
+    <div id="modal_window" class="modal">
+      <div class="modal_head">
+        <div class="modal_title">Leave a message</div>
+        <a class="modal_button" id="button_close"><img class="modal_close_img" src="image/button_close.png"></a>
+      </div>
+      <div class="clear"></div>
+      <div class="enter_name">
+        <input class="enter_name_text" placeholder="Name (Required)">
+      </div>
+      <div class="enter_mail">
+        <input class="enter_mail_text" placeholder="Email (Required) ">
+      </div>
+      <div class="clear"></div>
+      <div class="enter_message">
+        <input class="enter_message_text" placeholder="Enter your message...">
+      </div>
+      <a href="#" id="style_button">
+        <button class="button" type="button">SUBMIT MESSAGE</button>
+      </a>
+    </div>
+  </div>
     <div class="navbar">
       <div class="container">
         <div class="mail_icon"><a class="menu_name" href="">info@.reen.com</a></div>
@@ -27,10 +49,10 @@
       <div class="container">
         <div class="main_logo"><img src="image/logo.png" alt="logo REEN"></div>
           <ul class="nav">
-            <li class="nav_li"><a href="#navabout" class="menu_name">ABOUT US</a></li>
+            <li class="nav_li"><a id='about' href="#navabout" class="menu_name">ABOUT US</a></li>
             <li class="nav_li"><a href="#navworks" class="menu_name">LATEST WORKS</a></li>
             <li class="nav_li"><a href="#navtouch" class="menu_name">GET IN TOUCH</a></li>
-            <li class="nav_li"><a href="#" class="menu_name">CONTACT US</a></li>
+            <li class="nav_li"><a href="#" id="contact_us" class="menu_name">CONTACT US</a></li>
           </ul>
         <div class="standart_icon"></div>
       </div>
@@ -47,9 +69,9 @@
           <button class="button" type="button">GET STARTED NOW</button>
         </div>
       </div>
+      <section id="navabout">
       <div class="who_we_are">
         <div class="container">
-          <section id="navabout">
           <div class="beautiful_title">Beautiful. Clean. Responsive.</div>
           <div class="beautiful_text">
             REEN is a high-quality solution for those who want a beautiful website in no time.<br>
@@ -88,7 +110,7 @@
               </div>
             </div>
           </div>
-            <div class="for_inline blocks_open">
+            <div id='blocks_open' class="for_inline">
               <div class="who_total_tree_blocks technology">
                 <div class="total_tree_blocks_title">Technology</div>
                 <div class="total_tree_blocks_text">
@@ -120,14 +142,15 @@
                 </div>
               </div>
             </div>
-            <div id="button_more" class="but"><button class="button" type="button">SHOW MORE</button></div>
+            <div class="but"><button id="button_more" class="button" type="button">SHOW MORE</button></div>
+            <button id="back" class="button" type="button">COME BACK</button>
           <div class="clear"></div>
-          </section>
         </div>
       </div>
+      </section>
+      <section id="navworks">
       <div class="latest_works">
         <div class="container">
-          <section id="navworks">
           <div class="main_title_style">Check out our latest works</div>
           <div class="main_subtitle">Magnis modipsae que voloratati andigen daepeditem quiate re porem aut labor.</div>
           <div class="clear"></div>
@@ -154,21 +177,21 @@
             <div class="clear"></div>
             <div class="pagination"><img src="image/pagination.png" alt="icon pagination"></div>
           </div>
-            </section>
         </div>
       </div>
+      </section>
+      <section id="navtouch">
       <div class="get_touch">
         <div class="container">
-          <section id="navtouch">
           <div class="main_title_style">Want to work with us?</div>
           <div class="main_subtitle">
             Magnis modipsae que lib voloratati andigen daepeditem quiate re porem aut labor.<br>
             Laceaque quiae sitiorem rest non restibusaes maio es dem tumquam.
           </div>
           <button class="button_touch" type="button">GET IN TOUCH</button>
-          </section>
         </div>
       </div>
+      </section>
     </div>
     <div class="footer">
       <div class="container">

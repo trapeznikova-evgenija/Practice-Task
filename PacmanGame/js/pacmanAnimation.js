@@ -14,9 +14,11 @@ var gameStart = document.getElementById('game_start');
 var gameEnd = document.getElementById('game_over');
 
 var packman = new Packman(26, 52, 0, 0, 0, 105, 105, 6, 4, DIRECTION_SPRITE_PACKMAN_RIGHT);
-var firstEnemy = new Enemy(431, 130, DIRECTION_SPRITE, 0, 199.5, 32, 32, 0, 1);
-var secondEnemy = new Enemy(296, 490, DIRECTION_SPRITE, 0, 112.5, 32, 32, 0, 0);
-var thirdEnemy = new Enemy(674, 289, DIRECTION_SPRITE, 0, 140.65, 32, 32, 0, 0);
+var firstEnemy = new Enemy(431, 130, 0, 199.5, 32, 32, 0, 1);
+var secondEnemy = new Enemy(296, 490, 0, 112.5, 32, 32, 0, 0);
+var thirdEnemy = new Enemy(674, 289, 0, 140.65, 32, 32, 0, 0);
+
+var enemys = [firstEnemy, secondEnemy, thirdEnemy];
 
 var setMelon = [{x: 70, y: 55}, {x: 135, y: 55}, {x: 200, y: 55}, {x: 265, y: 55}, {x: 330, y: 55}, {x: 284, y: 193},
                 {x: 284, y: 247}, {x: 216, y: 376}, {x: 156, y: 250}, {x: 232, y: 530}, {x: 152, y: 99}, {x: 23, y: 99},
@@ -29,7 +31,6 @@ var setMelon = [{x: 70, y: 55}, {x: 135, y: 55}, {x: 200, y: 55}, {x: 265, y: 55
                 {x: 349, y: 193}, {x: 414, y: 193}, {x: 479, y: 193}, {x: 438, y: 54}, {x: 503, y: 54}, {x: 568, y: 54},
                 {x: 633, y: 54}, {x: 698, y: 54}, {x: 705, y: 262}, {x: 640, y: 262}, {x: 580, y: 262}];
 
-var directionFirstEnemy = [{dx: -1, dy: 0}, {dx: 0, dy: -1}, {dx: 0, dy: 1}];
 
 window.onload = function () {
 
@@ -39,7 +40,6 @@ window.onload = function () {
 
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
-
   animationTick();
 };
 
@@ -55,17 +55,9 @@ function animationTick() {
   redraw(packman);
   packman.collisions();
 
-  drawEnemy(context, firstEnemy);
-  firstEnemy.redrawEnemy();
-  firstEnemy.collisionsEnemy();
-
-  drawEnemy(context, secondEnemy);
-  secondEnemy.redrawEnemy();
-  secondEnemy.collisionsEnemy();
-
-  drawEnemy(context, thirdEnemy);
-  thirdEnemy.redrawEnemy();
-  thirdEnemy.collisionsEnemy();
+  drawEnemy(context, enemys,  DIRECTION_SPRITE);
+  enemys[0].redrawEnemy();
+  
 
   addEventListener("keydown", findDirection);
 
@@ -108,7 +100,6 @@ function findDirection(event) {
       packman.updateImg();
       break;
   }
-  console.log("packman.path", packman.path);
 }
 
 function redraw(packman) {
@@ -134,7 +125,6 @@ function drawFood(context, foodFile, setMelon, packman) {
     for (var i = 0; i != setMelon.length; i++) {   // рисуем все арбузы
       context.drawImage(imgFood, setMelon[i].x, setMelon[i].y);
     }
-
 
     for (var k = 0; k != setMelon.length; k++) {
       if ((setMelon[k].x != undefined) && (setMelon[k].y) != undefined) {
@@ -177,21 +167,14 @@ function checkCollisions(packman) {
   return false;
 }
 
-function checkCollisionsEnemy(firstEnemy) {
-  var imageData = context.getImageData(firstEnemy._x - 1, firstEnemy._y - 1, 27, 27);
-  var pixels = imageData.data;
 
-  for (var i = 0; n = pixels.length, i < n; i += 4) {
-    var red = pixels[i];
-    var green = pixels[i + 1];
-    var blue = pixels[i + 2];
+var image = new Image();
+var framesPerRow;
 
-    if (red === 63 && green === 72 && blue === 204) {
-      return true;
-    }
-  }
-  return false;
-}
+image.onload = function () {
+  framesPerRow = Math.floor(image.width / 105);
+};
+image.src = packman.path;
 
 function Packman(x, y, dx, dy, score, frameWidth, frameHeight, frameSpeed, endFrame, path) {
   
@@ -205,6 +188,9 @@ function Packman(x, y, dx, dy, score, frameWidth, frameHeight, frameSpeed, endFr
 
   this.path = path;
 
+  this.currentFrame = 0;
+  this.counter = 0;
+
   this.collisions = function () {
     if (checkCollisions(this)) {
       this._x -= this.dx;
@@ -214,53 +200,41 @@ function Packman(x, y, dx, dy, score, frameWidth, frameHeight, frameSpeed, endFr
     }
   };
 
-  var image = new Image();
-  var framesPerRow;
-
-  image.onload = function () {
-    framesPerRow = Math.floor(image.width / frameWidth)
-  };
-  image.src = this.path;
-
-  
   this.updateImg = function () {
     image.src = this.path;
   };
 
-  var currentFrame = 0; //текущий кадр для отрисовки
-  var counter = 0; //счетчик ожидания
-
   this.update = function () {
 
-    if (counter == (frameSpeed - 1)) {
-      currentFrame = (currentFrame + 1) % endFrame;
+    if (this.counter == (frameSpeed - 1)) {
+      this.currentFrame = (this.currentFrame + 1) % endFrame;
     }
-    counter = (counter + 1) % frameSpeed
+    this.counter = (this.counter + 1) % frameSpeed
   };
 
   this.draw = function (x, y) {
-    var row = Math.floor(currentFrame / framesPerRow);
-    var col = Math.floor(currentFrame % framesPerRow);
+    var row = Math.floor(this.currentFrame / framesPerRow);
+    var col = Math.floor(this.currentFrame % framesPerRow);
 
     context.drawImage(image, col * frameWidth, row * frameHeight, frameWidth, frameHeight, x, y, 23, 23)
   }
 }
 
-function drawEnemy(context, firstEnemy) {
+function drawEnemy(context, enemys, imgFile) {
   var enemyImage = new Image();
   enemyImage.onload = function () {
-    context.drawImage(enemyImage, firstEnemy.xOnMap, firstEnemy.yOnMap, 28.125, 28.125, firstEnemy._x, firstEnemy._y, firstEnemy.enemyWidth, firstEnemy.enemyHeight);
+    context.drawImage(enemyImage, enemys[0].xOnMap, enemys[0].yOnMap, 28.125, 28.125, enemys[0]._x, enemys[0]._y, enemys[0].enemyWidth, enemys[0].enemyHeight);
+    context.drawImage(enemyImage, enemys[1].xOnMap, enemys[1].yOnMap, 28.125, 28.125, enemys[1]._x, enemys[1]._y, enemys[1].enemyWidth, enemys[1].enemyHeight);
+    context.drawImage(enemyImage, enemys[2].xOnMap, enemys[2].yOnMap, 28.125, 28.125, enemys[2]._x, enemys[2]._y, enemys[2].enemyWidth, enemys[2].enemyHeight);
   };
-  enemyImage.src = firstEnemy.imgEnemy;
+  enemyImage.src = imgFile;
 }
 
-function Enemy(x, y, enemyImg, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy) {
+function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy) {
   this._x = x;
   this._y = y;
   this.enemyWidth = sizeWidth;
   this.enemyHeight = sizeHeight;
-
-  this.imgEnemy = enemyImg;
 
   this.xOnMap = xOnMap;
   this.yOnMap = yOnMap;
@@ -270,27 +244,38 @@ function Enemy(x, y, enemyImg, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy) {
   this.dxSpeed = dx;
   this.dySpeed = dy;
 
-  this.collisionsEnemy = function () {
-    var i = 0;
-    if (checkCollisionsEnemy(this)) {
-        if (i === 0) {
-          this.dySpeed = directionFirstEnemy[0].dy;
-          this.dxSpeed = directionFirstEnemy[0].dx;
-        }
-        
-      this._x += this.dxSpeed;
-      this._y += this.dySpeed;
-
-    }
-  };
-
 
   this.redrawEnemy = function () {
-    if (this.dxSpeed !== 0 || this.dySpeed !== 0) {
 
-      this._x += this.dxSpeed;
-      this._y += this.dySpeed
+    if (checkCollisions(this)) {
 
+      if (this.dySpeed != 0) {
+        if (randomInteger(0, 1)) {
+            this.dxSpeed = 1
+        } else {
+            this.dxSpeed = -1
+        }
+        this.dySpeed = 0;
+      } else {
+        if (this.dxSpeed != 0) {
+          if (randomInteger(0, 1)) {
+            this.dySpeed = 1
+          } else {
+            this.dySpeed = -1
+          }
+          this.dxSpeed = 0;
+        }
+      }
     }
+
+    this._x += this.dxSpeed;
+    this._y += this.dySpeed;
   }
+}
+
+
+function randomInteger(min, max) {
+  var rand = min + Math.random() * (max + 1 - min);
+  rand = Math.floor(rand);
+  return rand;
 }

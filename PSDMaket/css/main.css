@@ -240,16 +240,12 @@ a {
 
 .who_we_are {
   padding: 120px 0 120px 0; }
-  .who_we_are .blocks_open {
+  .who_we_are #blocks_open {
     display: none;
     transition: 1s;
     opacity: 0; }
-  .who_we_are .hidden_block {
+  .who_we_are #back {
     display: none; }
-  .who_we_are .opacity_visible {
-    opacity: 1; }
-  .who_we_are .open_block {
-    display: block; }
   .who_we_are .for_inline {
     text-align: center; }
   .who_we_are .who_total_tree_blocks {
@@ -439,15 +435,102 @@ a {
   position: fixed;
   right: 10px;
   bottom: 10px;
-  cursor: pointer;
-  display: none; }
+  cursor: pointer; }
   .button_up_down:hover {
     opacity: 1;
     transition: all 0.3s ease-out; }
-  .button_up_down .open {
-    display: block; }
 
-.emergence {
-  display: block; }
+#main_modal {
+  background-color: rgba(242, 245, 247, 0.8);
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: none;
+  transition: 1s;
+  opacity: 0; }
+
+.modal {
+  margin: 0 auto;
+  position: relative;
+  background-image: url("../image/modal.png");
+  padding: 5px 25px 170px;
+  z-index: 999;
+  width: 970px;
+  height: 526px;
+  margin-top: 30px; }
+
+.modal_title {
+  float: left;
+  font-size: 50px;
+  width: 92%;
+  margin-left: 30px;
+  font-family: "Lato Black", sans-serif;
+  font-weight: bold;
+  color: #506a85; }
+
+.modal_head {
+  margin-top: 35px; }
+
+.modal_close_img {
+  margin-top: 13px; }
+
+.enter_name {
+  background-image: url("../image/enter.png");
+  width: 420px;
+  height: 48px;
+  float: left;
+  margin-left: 40px;
+  margin-top: 60px; }
+  .enter_name .enter_name_text {
+    font-size: 13px;
+    border: none;
+    background-color: #f8fafd;
+    padding-left: 15px;
+    padding-top: 15px;
+    outline: none; }
+
+.enter_mail {
+  background-image: url("../image/enter.png");
+  width: 420px;
+  height: 48px;
+  float: left;
+  margin-left: 40px;
+  margin-top: 60px; }
+
+.enter_mail_text {
+  font-size: 13px;
+  border: none;
+  background-color: #f8fafd;
+  padding-left: 15px;
+  padding-top: 15px;
+  outline: none; }
+
+.enter_message {
+  background-image: url("../image/enter_message.png");
+  width: 854px;
+  height: 135px;
+  margin-top: 80px;
+  margin-left: 40px;
+  padding-left: 15px;
+  padding-top: 15px; }
+  .enter_message .enter_message_text {
+    font-size: 13px;
+    border: none;
+    outline: none;
+    background-color: #f8fafd; }
+
+#style_button {
+  float: left;
+  margin-left: 40px;
+  margin-top: 30px; }
+
+.modal_button {
+  cursor: pointer; }
+
+.menu_name:hover {
+  color: #73879c;
+  text-decoration: underline; }
 
 /*# sourceMappingURL=main.css.map */

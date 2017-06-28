@@ -1,96 +1,148 @@
 //Smooth scroll
+var link = document.querySelectorAll('[href^="#nav"]');
+var scrolled = 0;
+var to = 0;
 
-var linkNav = document.querySelectorAll('[href^="#nav"]'), speed = 1;// скорость
+for (var i = 0; i < link.length; i++) {
+  link[i].onclick = function () {
+    var id = this.href.replace(/[^#]*(.*)/, '$1');
+    to = document.querySelector(id).getBoundingClientRect().top;
+    scrollToCoord();
+  };
 
-for (var i = 0; i < linkNav.length; i++) {
-  
-  linkNav[i].onclick = function () {
+}
 
-    var checkWindow = window.pageYOffset, hash = this.href.replace(/[^#]*(.*)/, '$1');
-    var toFirst = document.querySelector(hash).getBoundingClientRect().top;
-    var start = null;
+function scrollToCoord() {
 
-    requestAnimationFrame(step);
-    function step(time) {
-      
-      if (start === null) start = time;
-
-      var progress = time - start;
-      var right = (toFirst < 0 ? Math.max(checkWindow - progress / speed, checkWindow + toFirst) : Math.min(checkWindow + progress / speed, checkWindow + toFirst));
-
-      window.scrollTo(0, right);
-      if (right != checkWindow + toFirst) {
-        requestAnimationFrame(step)
-      }
-      else {
-        location.hash = hash
-      }
-    }
-    return false;
+  if (scrolled <= to ) {
+    window.scrollTo(0, scrolled);
+    scrolled = scrolled + 30;
+    requestAnimationFrame(scrollToCoord);
+  } else {
+    window.scrollTo(0, to);
+    scrolled = 0;
   }
 }
 
 //show more
-
 var showMoreButton = document.getElementById('button_more');
-var showMoreBlock = document.getElementsByClassName('blocks_open');
+var showMoreBlock = document.getElementById('blocks_open');
+var comeBackButton = document.getElementById('back');
 
-showMoreButton.addEventListener("click", function (event) {
-  event.preventDefault();
-  showMoreButton.classList.add('hidden_block');
-  opacity();
-  showMoreBlock[0].classList.add('open_block');
+comeBackButton.style.display = 'none';
+
+showMoreButton.addEventListener('click', function (event) {
+  showMoreButton.style.display = 'none';
+  getInvisibleBlock();
+  interval();
+  openBlock();
+  comeBackButton.style.display = 'block'
 }, false);
 
-function opacity() {
-  
+
+comeBackButton.addEventListener('click', function (event) {
+  showMoreBlock.style.display = 'none';
+  comeBackButton.style.display = 'none';
+  showMoreButton.style.display = 'block';
+  showMoreBlock.style.opacity = 0;
+
+}, false);
+
+function interval() {
   setTimeout(function () {
-    var showMoreBox = document.getElementsByClassName('blocks_open');
+    showMoreBlock.style.opacity = 1;
+  }, 800)
+}
 
-    for (var i = 0; i < showMoreBox.length; i++) {
-      console.log(showMoreBox.length); 
-      var showMoreBoxAll = showMoreBox[i];
+function openBlock() {
+  showMoreBlock.style.display = 'block'
+}
 
-      showMoreBoxAll.classList.add('opacity_visible');
-    }
-  }, 500);
+function getInvisibleBlock() {
+  setTimeout(function () {
+    showMoreBlock.style.opacity = 0;
+
+  }, 100)
 }
 
 //roll-up
-
 var buttonId = document.getElementById('up_down');
-Up();
+buttonId.style.display = 'none';
 
-function Up() {
-  
-  Show_Button();
-  
-  buttonId.addEventListener("click", function (event) {
-    event.preventDefault();
-    function down() {
-      var top = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+window.onscroll = function () {
+  var scrollY = window.pageYOffset;
 
-      if (top > 0) {
-        window.scrollBy(0, -100);
-        buttonId.classList.remove('emergence');
-        requestAnimationFrame(down);
-      }
+  if (scrollY > 160) {
+    showButton();
+  } else {
+    buttonId.style.display = 'none'
+  }
+
+  buttonId.onclick = function () {
+    scrolling();
+  };
+
+  function showButton() {
+    buttonId.style.display = 'block';
+  }
+
+  function scrolling() {
+    if (scrollY > 0) {
+      window.scrollTo(0, scrollY);
+      scrollY = scrollY - 80;
+      requestAnimationFrame(scrolling)
+    } else {
+      window.scrollTo(0, 0);
     }
-
-    down();
-  }, false);
-}
-
-function Show_Button() {
-  window.addEventListener('scroll', function () {
-    if (window.scrollY > 153) {
-      buttonId.classList.add('emergence');
-    }
-    else {
-      buttonId.classList.remove('emergence');
-    }
-  })
-}
+  }
+};
 
 //modal window 
 
+var contactUs = document.getElementById('contact_us');
+var modalWindow = document.getElementById('main_modal');
+var closeButton = document.getElementById('button_close');
+var count = 0;
+
+contactUs.addEventListener('click', function (event) {
+  getInvisibleModalWindow();
+  wait();
+  openWindow();
+}, false);
+
+closeButton.addEventListener('click', function (event) {
+  waitInv();
+  waitAndCloseWindow();
+}, false);
+
+function getInvisibleModalWindow() {
+  setTimeout(function () {
+    modalWindow.style.opacity = 0;
+
+  }, 100)
+}
+
+function openWindow() {
+  modalWindow.style.display = 'block';
+}
+function wait() {
+  setTimeout(function () {
+    modalWindow.style.opacity = 1;
+  }, 500)
+}
+
+function waitInv() {
+  setTimeout(function () {
+    modalWindow.style.opacity = 0;
+  }, 500)
+}
+
+function waitAndCloseWindow() {
+  if (count < 60) {
+    count++;
+    requestAnimationFrame(waitAndCloseWindow);
+  } else {
+    modalWindow.style.display = 'none';
+    count = 0;
+  }
+}
