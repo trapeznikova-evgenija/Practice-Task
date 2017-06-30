@@ -11,22 +11,39 @@ body {
     background: url("../image/background.jpg")
 }
 
-#game_over {
+#game_over_won {
     background-color: rgba(0, 120, 199, 0.7);
     width: 822px;
     height: 579px;
-    display: block;
+    display: none;
     margin: 0 auto;
     text-align: center;
     margin-top: 20px;
 }
 
-.game_over_element {
+.game_over_element_won {
     font-family: 'Patrick Hand SC', cursive;
     font-size: 90px;
     position: relative;
     top: 180px;
 
+}
+
+#game_over_loser {
+    background-color: rgba(0, 120, 199, 0.7);
+    width: 822px;
+    height: 579px;
+    display: none;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.game_over_loser {
+    font-family: 'Patrick Hand SC', cursive;
+    font-size: 90px;
+    position: relative;
+    top: 180px;
 }
 
 .game_over_score {
