@@ -766,4 +766,8 @@ a {
 #back {
   display: none; }
 
+#whoWeAre {
+  display: none;
+  overflow: scroll; }
+
 /*# sourceMappingURL=main.css.map */

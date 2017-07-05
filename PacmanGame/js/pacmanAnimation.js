@@ -15,24 +15,28 @@ var gameEndWon = document.getElementById('game_over_won');
 var gameEndLos = document.getElementById('game_over_loser');
 
 var packman = new Packman(26, 52, 0, 0, 0, 105, 105, 6, 4, DIRECTION_SPRITE_PACKMAN_RIGHT);
-var firstEnemy = new Enemy(431, 130, 0, 199.5, 32, 32, 0, 0);
-var secondEnemy = new Enemy(296, 490, 0, 112.5, 32, 32, 0, 0);
-var thirdEnemy = new Enemy(674, 289, 0, 140.65, 32, 32, 0, 0);
+var firstEnemy = new Enemy(431, 130, 0, 199.5, 32, 32, 0, 0, 1);
+var secondEnemy = new Enemy(296, 490, 0, 112.5, 32, 32, 0, 0, 2);
+var thirdEnemy = new Enemy(674, 289, 0, 140.65, 32, 32, 0, 0, 4);
 
 var enemys = [firstEnemy, secondEnemy, thirdEnemy];
+var atacks = false;
+
 
 var setMelon = [{x: 70, y: 55}, {x: 135, y: 55}, {x: 200, y: 55}, {x: 265, y: 55}, {x: 330, y: 55}, {x: 284, y: 193},
                 {x: 284, y: 247}, {x: 216, y: 376}, {x: 156, y: 250}, {x: 232, y: 530}, {x: 152, y: 99}, {x: 23, y: 99},
                 {x: 167, y: 530}, {x: 102, y: 530}, {x: 25, y: 488}, {x: 55, y: 364}, {x: 28, y: 250}, {x: 93, y: 250},
                 {x: 35, y: 530}, {x: 297, y: 530}, {x: 362, y: 530}, {x: 427, y: 535}, {x: 492, y: 535}, {x: 557, y: 535},
-                {x: 622, y: 535}, {x: 687, y: 535}, {x: 752, y: 535}, {x: 770, y: 67}, {x: 770, y: 132}, {x: 770, y: 197},
+                {x: 622, y: 535}, {x: 687, y: 535}, {x: 752, y: 535}, {x: 770, y: 96}, {x: 770, y: 145}, {x: 770, y: 197},
                 {x: 770, y: 262}, {x: 770, y: 327}, {x: 770, y: 392}, {x: 770, y: 457}, {x: 453, y: 450}, {x: 516, y: 450},
                 {x: 579, y: 450}, {x: 264, y: 439}, {x: 159, y: 436}, {x: 96, y: 436}, {x: 33, y: 436}, {x: 23, y: 144},
                 {x: 88, y: 144}, {x: 153, y: 144}, {x: 218, y: 144}, {x: 283, y: 144}, {x: 340, y: 144}, {x: 331, y: 100},
                 {x: 349, y: 193}, {x: 414, y: 193}, {x: 479, y: 193}, {x: 438, y: 54}, {x: 503, y: 54}, {x: 568, y: 54},
-                {x: 633, y: 54}, {x: 698, y: 54}, {x: 705, y: 262}, {x: 640, y: 262}, {x: 580, y: 262}];
-
-
+                {x: 633, y: 54}, {x: 698, y: 54}, {x: 705, y: 262}, {x: 640, y: 262}, {x: 580, y: 262}, {x: 437, y: 100},
+                {x: 437, y: 145}, {x: 501, y: 145}, {x: 565, y: 145}, {x: 629, y: 145}, {x: 693, y: 145}, {x: 632, y: 95},
+                {x: 433, y: 312}, {x: 433, y: 362}, {x: 433, y: 412}, {x: 475, y: 250}, {x: 601, y: 198}, {x: 497, y: 312},
+                {x: 561, y: 312}, {x: 625, y: 312}, {x: 689, y: 312}, {x: 497, y: 360}, {x: 561, y: 360}, {x: 610, y: 360},
+                {x: 593, y: 410}, {x: 169, y: 334}, {x: 233, y: 334}, {x: 297, y: 334}];
 window.onload = function () {
 
   canvas = document.getElementById("canvas");
@@ -45,7 +49,7 @@ window.onload = function () {
 };
 
 function animationTick() {
-  
+
   drawMaze(DIRECTION_MAZE, 0, 0);
   drawFood(context, DIRECTION_FOOD, setMelon, packman);
   drawScore(packman, context);
@@ -56,7 +60,9 @@ function animationTick() {
   packman.collisions();
 
   drawEnemy(context, enemys, DIRECTION_SPRITE);
-  mindEnemy(firstEnemy, packman);
+  firstEnemy.mind();
+  secondEnemy.mind();
+  thirdEnemy.mind();
 
   addEventListener("keydown", findDirection);
 
@@ -78,11 +84,19 @@ function noneStart() {
 
 function gameOverWon() {
   gameEndWon.style.display = 'block';
+  var scoreTable = document.createElement('p');
+  scoreTable.className = 'font_for_score';
+  scoreTable.innerHTML = packman._score;
+  gameEndWon.insertBefore(scoreTable, gameEndWon.lastChild);
   canvas.style.display = 'none';
 }
 
 function gameOverLos() {
   gameEndLos.style.display = 'block';
+  var scoreTable = document.createElement('p');
+  scoreTable.className = 'font_for_score';
+  scoreTable.innerHTML = packman._score;
+  gameEndLos.insertBefore(scoreTable, gameEndLos.lastChild);
   canvas.style.display = 'none';
 }
 
@@ -137,7 +151,7 @@ function drawFood(context, foodFile, setMelon, packman) {
 
     for (var k = 0; k != setMelon.length; k++) {
       if ((setMelon[k].x != undefined) && (setMelon[k].y) != undefined) {
-        if (((packman._x + 10 > setMelon[k].x) && (packman._x <= setMelon[k].x + 18)) && ((packman._y + 10 > setMelon[k].y) && (packman._y <= setMelon[k].y + 18)))  {
+        if (((packman._x + 18 > setMelon[k].x) && (packman._x <= setMelon[k].x + 18)) && ((packman._y + 18 > setMelon[k].y) && (packman._y <= setMelon[k].y + 18)))  {
           delete setMelon[k].x;
           delete setMelon[k].y;
           packman._score += 1;
@@ -169,7 +183,7 @@ function checkCollisions(packman, context) {
     var green = pixels[i + 1];
     var blue = pixels[i + 2];
 
-    if (red === 63 && green === 72 && blue === 204) {
+    if(((red > 60) && (red < 68)) && ((green > 69) && (green < 75)) && ((blue > 200) && (blue < 206)))  {
       return true;
     }
   }
@@ -186,13 +200,13 @@ image.onload = function () {
 image.src = packman.path;
 
 function Packman(x, y, dx, dy, score, frameWidth, frameHeight, frameSpeed, endFrame, path) {
-  
+
   this.dx = dx;
   this.dy = dy;
-
+ 
   this._x = x;
   this._y = y;
-  
+
   this._score = score;
 
   this.path = path;
@@ -229,7 +243,6 @@ function Packman(x, y, dx, dy, score, frameWidth, frameHeight, frameSpeed, endFr
   }
 }
 
-
 function drawEnemy(context, enemys, imgFile) {
   var enemyImage = new Image();
   enemyImage.onload = function () {
@@ -240,7 +253,7 @@ function drawEnemy(context, enemys, imgFile) {
   enemyImage.src = imgFile;
 }
 
-function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy) {
+function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy, regulator) {
   this._xEnemy = x;
   this._yEnemy = y;
   this.enemyWidth = sizeWidth;
@@ -254,45 +267,61 @@ function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy) {
   this.dxSpeed = dx;
   this.dySpeed = dy;
 
+  this.regulator = regulator;
 
+  this.mind = function () {
+    var directions = [ { x: -1, y: 0 }, { x: 1, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 } ];
+    this.dxSpeed = packman._x - this._xEnemy/ this.regulator;
+    this.dySpeed = packman._y - this._yEnemy/ this.regulator;
 
-  this.redrawEnemy = function () {
-
-    if (checkCollisions(this)) {
-
-      if (this.dySpeed != 0) {
-        if (randomInteger(0, 1)) {
-            this.dxSpeed = 1
-        } else {
-            this.dxSpeed = -1
-        }
-        this.dySpeed = 0;
-      } else {
-        if (this.dxSpeed != 0) {
-          if (randomInteger(0, 1)) {
-            this.dySpeed = 1
+    if ((this._xEnemy > 21 && this._xEnemy < 797) && (this._yEnemy > 42 && this._yEnemy < 557)) {
+      if  (!checkCollisionsEnemy(this, context)) {
+        if (Math.abs(this.dxSpeed) > Math.abs(this.dySpeed)) {
+          if (this.dxSpeed < 0) {
+            this.dxSpeed = directions[0].x;
           } else {
-            this.dySpeed = -1
+            this.dxSpeed = directions[1].x;
           }
-          this.dxSpeed = 0;
+          this._xEnemy += this.dxSpeed
+        } else {
+          if (this.dySpeed < 0) {
+            this.dySpeed = directions[2].y;
+          } else {
+            this.dySpeed = directions[3].y;
+          }
+          this._yEnemy += this.dySpeed
+        }
+      } else {
+        if (Math.abs(this.dxSpeed) < Math.abs(this.dySpeed)) {
+          if (this.dxSpeed < 0) {
+            this.dxSpeed = directions[0].x;
+          } else {
+            this.dxSpeed = directions[1].x;
+          }
+          this._xEnemy -= this.dxSpeed
+        } else {
+          if (this.dySpeed < 0) {
+            this.dySpeed = directions[2].y;
+          } else {
+            this.dySpeed = directions[3].y;
+          }
+          this._yEnemy -= this.dySpeed
         }
       }
+    } else {
+      this._xEnemy -= 2;
+      this._yEnemy -= 2;
     }
 
-    this._x += this.dxSpeed;
-    this._y += this.dySpeed;
+
+    if (((this._xEnemy + 10 > packman._x) && (this._xEnemy <= packman._x + 23)) && ((this._yEnemy + 10 > packman._y) && (this._yEnemy <= packman._y + 23))) {
+      atacks = true; 
+    }
   }
 }
 
-
-function randomInteger(min, max) {
-  var rand = min + Math.random() * (max + 1 - min);
-  rand = Math.floor(rand);
-  return rand;
-}
-
 function checkCollisionsEnemy(enemyNumber, context) {
-  var imageData = context.getImageData(enemyNumber._xEnemy, enemyNumber._yEnemy, 27, 27);
+  var imageData = context.getImageData(enemyNumber._xEnemy, enemyNumber._yEnemy, 32, 32);
   var pixels = imageData.data;
 
   for (var i = 0; n = pixels.length, i < n; i += 4) {
@@ -300,62 +329,15 @@ function checkCollisionsEnemy(enemyNumber, context) {
     var green = pixels[i + 1];
     var blue = pixels[i + 2];
 
-    if (red === 63 && green === 72 && blue === 204) {
+    if (((red > 60) && (red < 68)) && ((green > 69) && (green < 75)) && ((blue > 200) && (blue < 206))) {
       return true;
     }
   }
   return false;
 }
 
-var atacks = false;
 
-function mindEnemy(enemyNumber, packman) {
 
-  var directions = [ { x: -1, y:0 }, { x: 1, y:0 }, { x: 0, y: -1 }, { x: 0, y: 1 } ];
-  //console.log(Number(firstEnemy._xEnemy));
-  enemyNumber.dxSpeed = packman._x - enemyNumber._xEnemy;
-  enemyNumber.dySpeed = packman._y - enemyNumber._yEnemy;
-  // console.log('firstEnemy.dxSpeed ', firstEnemy.dxSpeed);
-  //console.log(!checkCollisionsEnemy(enemyNumber, context));
-  if  (!checkCollisionsEnemy(enemyNumber, context)) {
-    if (Math.abs(enemyNumber.dxSpeed) > Math.abs(enemyNumber.dySpeed)) {
-      if (enemyNumber.dxSpeed < 0) {
-        enemyNumber.dxSpeed = directions[0].x;
-      } else {
-        enemyNumber.dxSpeed = directions[1].x;
-      }
-      enemyNumber._xEnemy += enemyNumber.dxSpeed
-    } else {
-      if (enemyNumber.dySpeed < 0) {
-        enemyNumber.dySpeed = directions[2].y;
-      } else {
-        enemyNumber.dySpeed = directions[3].y;
-      }
-      enemyNumber._yEnemy += enemyNumber.dySpeed
-    }
-  } else {
-    if (Math.abs(enemyNumber.dxSpeed) < Math.abs(enemyNumber.dySpeed)) {
-      if (enemyNumber.dxSpeed < 0) {
-        enemyNumber.dxSpeed = directions[0].x;
-      } else {
-        enemyNumber.dxSpeed = directions[1].x;
-      }
-      enemyNumber._xEnemy -= enemyNumber.dxSpeed
-    } else {
-      if (enemyNumber.dySpeed < 0) {
-        enemyNumber.dySpeed = directions[2].y;
-      } else {
-        enemyNumber.dySpeed = directions[3].y;
-      }
-      enemyNumber._yEnemy -= enemyNumber.dySpeed
-    }
-  }
-
-  if (((enemyNumber._xEnemy + 10 > packman._x) && (enemyNumber._xEnemy <= packman._x + 23)) && ((enemyNumber._yEnemy + 10 > packman._y) && (enemyNumber._yEnemy <= packman._y + 23))) {
-    atacks = true;
-  }
-
-}
 
 
 /* for (var amountEnemy = 0; amountEnemy < enemys.length; amountEnemy++) {
@@ -402,4 +384,32 @@ function mindEnemy(enemyNumber, packman) {
  atacks = true;
  }
 
+ } */
+
+/*
+ this.redrawEnemy = function () {
+
+ if (checkCollisions(this)) {
+
+ if (this.dySpeed != 0) {
+ if (randomInteger(0, 1)) {
+ this.dxSpeed = 1
+ } else {
+ this.dxSpeed = -1
+ }
+ this.dySpeed = 0;
+ } else {
+ if (this.dxSpeed != 0) {
+ if (randomInteger(0, 1)) {
+ this.dySpeed = 1
+ } else {
+ this.dySpeed = -1
+ }
+ this.dxSpeed = 0;
+ }
+ }
+ }
+
+ this._x += this.dxSpeed;
+ this._y += this.dySpeed;
  } */

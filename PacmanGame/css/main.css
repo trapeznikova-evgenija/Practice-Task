@@ -25,7 +25,7 @@ body {
     font-family: 'Patrick Hand SC', cursive;
     font-size: 90px;
     position: relative;
-    top: 180px;
+    top: 100px;
 
 }
 
@@ -43,19 +43,29 @@ body {
     font-family: 'Patrick Hand SC', cursive;
     font-size: 90px;
     position: relative;
-    top: 180px;
+    top: 112px;
 }
 
 .game_over_score {
     font-family: 'Patrick Hand SC', cursive;
     font-size: 60px;
     position: relative;
-    top: 180px;
+    top: 86px;
+    right: 30px;
+}
+
+.font_for_score {
+    font-family: 'Patrick Hand SC', cursive;
+    font-size: 60px;
+    position: relative;
+    margin-top: -88px;
+    margin-left: 160px;
 }
 
 .melon {
     position: relative;
-    top: 190px;
+    top: 112px;
+    right: 20px;
 }
 
 #game_start {
@@ -86,4 +96,5 @@ body {
     border-bottom: 2px solid darkred;
     position: relative;
     top: 150px;
+    cursor: pointer;
 }
