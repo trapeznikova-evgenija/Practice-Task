@@ -15,7 +15,7 @@ var gameEndWon = document.getElementById('game_over_won');
 var gameEndLos = document.getElementById('game_over_loser');
 
 var packman = new Packman(26, 52, 0, 0, 0, 105, 105, 6, 4, DIRECTION_SPRITE_PACKMAN_RIGHT);
-var firstEnemy = new Enemy(431, 130, 0, 199.5, 32, 32, 0, 0, 1);
+var firstEnemy = new Enemy(431, 130, 0, 140.65, 32, 32, 0, 0, 1);
 var secondEnemy = new Enemy(296, 490, 0, 112.5, 32, 32, 0, 0, 2);
 var thirdEnemy = new Enemy(674, 289, 0, 140.65, 32, 32, 0, 0, 4);
 
@@ -41,7 +41,7 @@ window.onload = function () {
 
   canvas = document.getElementById("canvas");
   context = canvas.getContext("2d");
-  canvas.style.display = 'none';
+  canvas.style.display = 'block';
 
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
@@ -56,8 +56,7 @@ function animationTick() {
 
   packman.update();
   packman.draw(packman._x, packman._y);
-  redraw(packman);
-  packman.collisions();
+  packman.collisionsAndRedraw();
 
   drawEnemy(context, enemys, DIRECTION_SPRITE);
   firstEnemy.mind();
@@ -124,15 +123,6 @@ function findDirection(event) {
   }
 }
 
-function redraw(packman) {
-  if (packman.dx !== 0 || packman.dy !== 0) {
-
-    packman._x += packman.dx;
-    packman._y += packman.dy
-
-  }
-}
-
 function drawScore(packman, context) {
     context.beginPath();
     context.fillStyle = "#505050";
@@ -183,7 +173,7 @@ function checkCollisions(packman, context) {
     var green = pixels[i + 1];
     var blue = pixels[i + 2];
 
-    if(((red > 60) && (red < 68)) && ((green > 69) && (green < 75)) && ((blue > 200) && (blue < 206)))  {
+    if(((red > 60) && (red < 68)) && ((green > 69) && (green < 80)) && ((blue > 200) && (blue < 206)))  {
       return true;
     }
   }
@@ -214,13 +204,20 @@ function Packman(x, y, dx, dy, score, frameWidth, frameHeight, frameSpeed, endFr
   this.currentFrame = 0;
   this.counter = 0;
 
-  this.collisions = function () {
+  this.collisionsAndRedraw = function () {
+
+    if (packman.dx !== 0 || packman.dy !== 0) {
+      packman._x += packman.dx;
+      packman._y += packman.dy
+    }
+
     if (checkCollisions(this, context)) {
       this._x -= this.dx;
       this._y -= this.dy;
       this.dx = 0;
       this.dy = 0;
     }
+
   };
 
   this.updateImg = function () {
@@ -269,55 +266,51 @@ function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy, regulator) {
 
   this.regulator = regulator;
 
-  this.mind = function () {
-    var directions = [ { x: -1, y: 0 }, { x: 1, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 } ];
-    this.dxSpeed = packman._x - this._xEnemy/ this.regulator;
-    this.dySpeed = packman._y - this._yEnemy/ this.regulator;
+  var directions = [ { x: -1, y: 0 }, { x: 1, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 } ];
+  var random;
 
-    if ((this._xEnemy > 21 && this._xEnemy < 797) && (this._yEnemy > 42 && this._yEnemy < 557)) {
+  var indicate = true;
+  
+  this.mind = function () {
+
       if  (!checkCollisionsEnemy(this, context)) {
-        if (Math.abs(this.dxSpeed) > Math.abs(this.dySpeed)) {
-          if (this.dxSpeed < 0) {
-            this.dxSpeed = directions[0].x;
-          } else {
-            this.dxSpeed = directions[1].x;
-          }
-          this._xEnemy += this.dxSpeed
-        } else {
-          if (this.dySpeed < 0) {
-            this.dySpeed = directions[2].y;
-          } else {
-            this.dySpeed = directions[3].y;
-          }
-          this._yEnemy += this.dySpeed
+
+        if (indicate) {
+          random = randomInteger(0, 3);
+       //   console.log('false ', random);
+          indicate = false;
         }
+        this.dxSpeed = directions[random].x;
+        this.dySpeed = directions[random].y;
+        this._xEnemy += this.dxSpeed;
+        this._yEnemy += this.dySpeed;
+
       } else {
-        if (Math.abs(this.dxSpeed) < Math.abs(this.dySpeed)) {
-          if (this.dxSpeed < 0) {
-            this.dxSpeed = directions[0].x;
-          } else {
-            this.dxSpeed = directions[1].x;
-          }
-          this._xEnemy -= this.dxSpeed
-        } else {
-          if (this.dySpeed < 0) {
-            this.dySpeed = directions[2].y;
-          } else {
-            this.dySpeed = directions[3].y;
-          }
-          this._yEnemy -= this.dySpeed
-        }
+
+        random = randomInteger(0, 3);
+      //  console.log('true ', random);
+        this.dxSpeed = directions[random].x;
+        this.dySpeed = directions[random].y;
+        this._xEnemy += this.dxSpeed;
+        this._yEnemy += this.dySpeed;
+        indicate = true;
+
       }
-    } else {
-      this._xEnemy -= 2;
-      this._yEnemy -= 2;
-    }
 
 
     if (((this._xEnemy + 10 > packman._x) && (this._xEnemy <= packman._x + 23)) && ((this._yEnemy + 10 > packman._y) && (this._yEnemy <= packman._y + 23))) {
       atacks = true; 
     }
   }
+}
+
+
+
+
+function randomInteger(min, max) {
+  var rand = min + Math.random() * (max + 1 - min);
+  rand = Math.floor(rand);
+  return rand;
 }
 
 function checkCollisionsEnemy(enemyNumber, context) {

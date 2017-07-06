@@ -72,7 +72,7 @@ body {
     background-color: rgba(0, 120, 199, 0.7);
     width: 822px;
     height: 579px;
-    display: block;
+    display: none;
     margin: 0 auto;
     text-align: center;
     margin-top: 20px;
