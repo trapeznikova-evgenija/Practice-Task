@@ -267,33 +267,49 @@ function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy, regulator) {
   this.regulator = regulator;
 
   var directions = [ { x: -1, y: 0 }, { x: 1, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 } ];
-  var random;
+  var randomNotColl;
+  var randomColl;
 
-  var indicate = true;
+  var indicateForNorm = true;
+  var indicateForCollis = true;
   
   this.mind = function () {
 
       if  (!checkCollisionsEnemy(this, context)) {
 
-        if (indicate) {
-          random = randomInteger(0, 3);
-       //   console.log('false ', random);
-          indicate = false;
+        if (indicateForNorm) {
+          randomNotColl = randomInteger(0, 3);
+          console.log('false ', randomNotColl);
+          indicateForNorm = false;
         }
-        this.dxSpeed = directions[random].x;
-        this.dySpeed = directions[random].y;
+
+        this.dxSpeed = directions[randomNotColl].x;
+        this.dySpeed = directions[randomNotColl].y;
         this._xEnemy += this.dxSpeed;
         this._yEnemy += this.dySpeed;
 
       } else {
 
-        random = randomInteger(0, 3);
-      //  console.log('true ', random);
-        this.dxSpeed = directions[random].x;
-        this.dySpeed = directions[random].y;
-        this._xEnemy += this.dxSpeed;
-        this._yEnemy += this.dySpeed;
-        indicate = true;
+       // (this.dxSpeed == 1) ? this._xEnemy += -1 : this._xEnemy += 1;
+       // (this.dySpeed == 1) ? this._yEnemy += -1 : this._yEnemy += 1;
+
+        if (randomNotColl == 0) {
+          this._xEnemy += 1;
+        }
+
+        if (randomNotColl == 1) {
+          this._xEnemy += -1;
+        }
+
+        if (randomNotColl == 2) {
+          this._yEnemy += 1;
+        }
+
+        if (randomNotColl == 3) {
+          this._yEnemy += -1;
+        }
+
+        indicateForNorm = true;
 
       }
 
@@ -314,7 +330,7 @@ function randomInteger(min, max) {
 }
 
 function checkCollisionsEnemy(enemyNumber, context) {
-  var imageData = context.getImageData(enemyNumber._xEnemy, enemyNumber._yEnemy, 32, 32);
+  var imageData = context.getImageData(enemyNumber._xEnemy - 2, enemyNumber._yEnemy - 2, 35, 35);
   var pixels = imageData.data;
 
   for (var i = 0; n = pixels.length, i < n; i += 4) {
@@ -322,7 +338,7 @@ function checkCollisionsEnemy(enemyNumber, context) {
     var green = pixels[i + 1];
     var blue = pixels[i + 2];
 
-    if (((red > 60) && (red < 68)) && ((green > 69) && (green < 75)) && ((blue > 200) && (blue < 206))) {
+    if (((red > 60) && (red < 68)) && ((green > 69) && (green < 80)) && ((blue > 200) && (blue < 206))) {
       return true;
     }
   }
