@@ -50,7 +50,7 @@ body {
     font-family: 'Patrick Hand SC', cursive;
     font-size: 60px;
     position: relative;
-    top: 86px;
+    top: 97px;
     right: 30px;
 }
 
@@ -58,21 +58,21 @@ body {
     font-family: 'Patrick Hand SC', cursive;
     font-size: 60px;
     position: relative;
-    margin-top: -88px;
+    margin-top: -71px;
     margin-left: 160px;
 }
 
 .melon {
     position: relative;
     top: 112px;
-    right: 20px;
+    right: -2px;
 }
 
 #game_start {
     background-color: rgba(0, 120, 199, 0.7);
     width: 822px;
     height: 579px;
-    display: none;
+    display: block;
     margin: 0 auto;
     text-align: center;
     margin-top: 20px;

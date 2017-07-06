@@ -13,15 +13,19 @@ var context;
 var gameStart = document.getElementById('game_start');
 var gameEndWon = document.getElementById('game_over_won');
 var gameEndLos = document.getElementById('game_over_loser');
+var startButton = document.getElementById('startButton');
+
+var game = new Game();
 
 var packman = new Packman(26, 52, 0, 0, 0, 105, 105, 6, 4, DIRECTION_SPRITE_PACKMAN_RIGHT);
-var firstEnemy = new Enemy(431, 130, 0, 140.65, 32, 32, 0, 0, 1);
-var secondEnemy = new Enemy(296, 490, 0, 112.5, 32, 32, 0, 0, 2);
-var thirdEnemy = new Enemy(674, 289, 0, 140.65, 32, 32, 0, 0, 4);
+var firstEnemy = new Enemy(431, 130, 0, 140.65, 32, 32, 0, 0);
+var secondEnemy = new Enemy(296, 490, 0, 112.5, 32, 32, 0, 0);
+var thirdEnemy = new Enemy(674, 289, 0, 140.65, 32, 32, 0, 0);
+var fourthEnemy = new Enemy(85, 141, 0, 140.65, 32, 32, 0, 0);
+var fifthEnemy = new Enemy(446, 316, 0, 140.65, 32, 32, 0, 0);
+var sixthEnemy = new Enemy(51, 252, 0, 112.5, 32, 32, 0, 0);
 
-var enemys = [firstEnemy, secondEnemy, thirdEnemy];
-var atacks = false;
-
+var enemys = [firstEnemy, secondEnemy, thirdEnemy, fourthEnemy, fifthEnemy, sixthEnemy];
 
 var setMelon = [{x: 70, y: 55}, {x: 135, y: 55}, {x: 200, y: 55}, {x: 265, y: 55}, {x: 330, y: 55}, {x: 284, y: 193},
                 {x: 284, y: 247}, {x: 216, y: 376}, {x: 156, y: 250}, {x: 232, y: 530}, {x: 152, y: 99}, {x: 23, y: 99},
@@ -37,15 +41,17 @@ var setMelon = [{x: 70, y: 55}, {x: 135, y: 55}, {x: 200, y: 55}, {x: 265, y: 55
                 {x: 433, y: 312}, {x: 433, y: 362}, {x: 433, y: 412}, {x: 475, y: 250}, {x: 601, y: 198}, {x: 497, y: 312},
                 {x: 561, y: 312}, {x: 625, y: 312}, {x: 689, y: 312}, {x: 497, y: 360}, {x: 561, y: 360}, {x: 610, y: 360},
                 {x: 593, y: 410}, {x: 169, y: 334}, {x: 233, y: 334}, {x: 297, y: 334}];
+
 window.onload = function () {
 
   canvas = document.getElementById("canvas");
   context = canvas.getContext("2d");
-  canvas.style.display = 'block';
+  canvas.style.display = 'none';
 
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
-  animationTick();
+
+  startButton.addEventListener('click', startTheGame);
 };
 
 function animationTick() {
@@ -54,31 +60,43 @@ function animationTick() {
   drawFood(context, DIRECTION_FOOD, setMelon, packman);
   drawScore(packman, context);
 
-  packman.update();
-  packman.draw(packman._x, packman._y);
-  packman.collisionsAndRedraw();
+  packman.redraw();
 
   drawEnemy(context, enemys, DIRECTION_SPRITE);
-  firstEnemy.mind();
-  secondEnemy.mind();
-  thirdEnemy.mind();
+  getTheEnemiesMoving(enemys);
 
   addEventListener("keydown", findDirection);
 
-  if ((packman._score === setMelon.length && !atacks)) {
+  switch (game.status) {
+  case game.STATUS.PLAY:
+    window.requestAnimationFrame(animationTick);
+    break;
+  case game.STATUS.GAMEOVER:
+    gameOverLos();
+    break;
+  case game.STATUS.GAMEWIN:
     gameOverWon();
-  } else {
-    if (atacks) {
-      gameOverLos();
-    } else {
-      window.requestAnimationFrame(animationTick)
-    }
+    break;
   }
 }
 
-function noneStart() {
+function Game() {
+  this.status = 1;
+  this.STATUS = {
+    PLAY: 0,
+    NONE: 1,
+    GAMEOVER: 2,
+    GAMEWIN: 3
+  };
+}
+
+function startTheGame() {
   gameStart.style.display = 'none';
   canvas.style.display = 'block';
+  game.status = 0;
+  if (game.status == game.STATUS.PLAY) {
+    animationTick();
+  }
 }
 
 function gameOverWon() {
@@ -119,6 +137,9 @@ function findDirection(event) {
       packman.dx = -1.6;
       packman.path = DIRECTION_SPRITE_PACKMAN_LEFT;
       packman.updateImg();
+      break;
+    case keys['SPACE']:
+      game.pause = true;
       break;
   }
 }
@@ -180,7 +201,6 @@ function checkCollisions(packman, context) {
   return false;
 }
 
-
 var image = new Image();
 var framesPerRow;
 
@@ -237,20 +257,35 @@ function Packman(x, y, dx, dy, score, frameWidth, frameHeight, frameSpeed, endFr
     var col = Math.floor(this.currentFrame % framesPerRow);
 
     context.drawImage(image, col * frameWidth, row * frameHeight, frameWidth, frameHeight, x, y, 23, 23)
+  };
+
+  this.redraw = function () {
+    this.update();
+    this.draw(this._x, this._y);
+    this.collisionsAndRedraw();
   }
 }
 
 function drawEnemy(context, enemys, imgFile) {
   var enemyImage = new Image();
   enemyImage.onload = function () {
-    context.drawImage(enemyImage, enemys[0].xOnMap, enemys[0].yOnMap, 28.125, 28.125, enemys[0]._xEnemy, enemys[0]._yEnemy, enemys[0].enemyWidth, enemys[0].enemyHeight);
-    context.drawImage(enemyImage, enemys[1].xOnMap, enemys[1].yOnMap, 28.125, 28.125, enemys[1]._xEnemy, enemys[1]._yEnemy, enemys[1].enemyWidth, enemys[1].enemyHeight);
-    context.drawImage(enemyImage, enemys[2].xOnMap, enemys[2].yOnMap, 28.125, 28.125, enemys[2]._xEnemy, enemys[2]._yEnemy, enemys[2].enemyWidth, enemys[2].enemyHeight);
+    for (var i = 0; i <= enemys.length; i++) {
+      context.drawImage(enemyImage, enemys[i].xOnMap, enemys[i].yOnMap, enemys[i].widthOnMap, enemys[i].heightOnMap, enemys[i]._xEnemy, enemys[i]._yEnemy, enemys[i].enemyWidth, enemys[i].enemyHeight);
+    }
   };
   enemyImage.src = imgFile;
 }
 
-function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy, regulator) {
+function getTheEnemiesMoving(enemys) {
+  enemys[0].mind();
+  enemys[1].mind();
+  enemys[2].mind();
+  enemys[3].mind();
+  enemys[4].mind();
+  enemys[5].mind();
+}
+
+function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy) {
   this._xEnemy = x;
   this._yEnemy = y;
   this.enemyWidth = sizeWidth;
@@ -264,64 +299,51 @@ function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy, regulator) {
   this.dxSpeed = dx;
   this.dySpeed = dy;
 
-  this.regulator = regulator;
-
   var directions = [ { x: -1, y: 0 }, { x: 1, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 } ];
-  var randomNotColl;
-  var randomColl;
-
-  var indicateForNorm = true;
-  var indicateForCollis = true;
+  var randomDirection;
+  var getDirections = true;
   
   this.mind = function () {
 
-      if  (!checkCollisionsEnemy(this, context)) {
+    if (!checkCollisionsEnemy(this, context)) {
 
-        if (indicateForNorm) {
-          randomNotColl = randomInteger(0, 3);
-          console.log('false ', randomNotColl);
-          indicateForNorm = false;
-        }
+      if (getDirections) {
+        randomDirection = randomInteger(0, 3);
+        getDirections = false;
+      }
 
-        this.dxSpeed = directions[randomNotColl].x;
-        this.dySpeed = directions[randomNotColl].y;
+        this.dxSpeed = directions[randomDirection].x;
+        this.dySpeed = directions[randomDirection].y;
         this._xEnemy += this.dxSpeed;
         this._yEnemy += this.dySpeed;
 
       } else {
 
-       // (this.dxSpeed == 1) ? this._xEnemy += -1 : this._xEnemy += 1;
-       // (this.dySpeed == 1) ? this._yEnemy += -1 : this._yEnemy += 1;
-
-        if (randomNotColl == 0) {
-          this._xEnemy += 1;
+        switch (randomDirection) {
+          case 0:
+            this._xEnemy += 1;
+            break;
+          case 1:
+            this._xEnemy += -1;
+            break;
+          case 2:
+            this._yEnemy += 1;
+            break;
+          case 3:
+            this._yEnemy += -1;
+            break;
         }
-
-        if (randomNotColl == 1) {
-          this._xEnemy += -1;
-        }
-
-        if (randomNotColl == 2) {
-          this._yEnemy += 1;
-        }
-
-        if (randomNotColl == 3) {
-          this._yEnemy += -1;
-        }
-
-        indicateForNorm = true;
-
+        getDirections = true;
+      
       }
 
-
-    if (((this._xEnemy + 10 > packman._x) && (this._xEnemy <= packman._x + 23)) && ((this._yEnemy + 10 > packman._y) && (this._yEnemy <= packman._y + 23))) {
-      atacks = true; 
+    if (((this._xEnemy + 23 > packman._x) && (this._xEnemy <= packman._x + 23)) && ((this._yEnemy + 23 > packman._y) && (this._yEnemy <= packman._y + 23))) {
+      game.status = 2;
+    } else if (packman._score === setMelon.length) {
+      game.status = 3;
     }
   }
 }
-
-
-
 
 function randomInteger(min, max) {
   var rand = min + Math.random() * (max + 1 - min);
@@ -344,81 +366,3 @@ function checkCollisionsEnemy(enemyNumber, context) {
   }
   return false;
 }
-
-
-
-
-
-/* for (var amountEnemy = 0; amountEnemy < enemys.length; amountEnemy++) {
- var directions = [ { x: -1, y:0 }, { x:1, y:0 }, { x:0, y: -1 }, { x:0, y:1 } ];
- enemys[amountEnemy].dxSpeed = packman._x - enemys[amountEnemy]._xEnemy;
- enemys[amountEnemy].dySpeed = packman._y - enemys[amountEnemy]._yEnemy;
- console.log(!checkCollisionsEnemy(firstEnemy, context));
- if  (!checkCollisionsEnemy(enemys, context, amountEnemy)) {
- if (Math.abs(enemys[amountEnemy].dxSpeed) > Math.abs(enemys[amountEnemy].dySpeed)) {
- if (enemys[amountEnemy].dxSpeed < 0) {
- enemys[amountEnemy].dxSpeed = directions[0].x;
- } else {
- enemys[amountEnemy].dxSpeed = directions[1].x;
- }
- enemys[amountEnemy]._xEnemy += enemys[amountEnemy].dxSpeed;
- console.log('Number(enemys[amountEnemy]._xEnemy) ',Number(enemys[amountEnemy]._xEnemy));
- } else {
- if (enemys[amountEnemy].dySpeed < 0) {
- enemys[amountEnemy].dySpeed = directions[2].y;
- } else {
- enemys[amountEnemy].dySpeed = directions[3].y;
- }
- enemys[amountEnemy]._yEnemy += enemys[amountEnemy].dySpeed
- }
- } else {
- if (Math.abs(enemys[amountEnemy].dxSpeed) < Math.abs(enemys[amountEnemy].dySpeed)) {
- if (enemys[amountEnemy].dxSpeed < 0) {
- enemys[amountEnemy].dxSpeed = directions[0].x;
- } else {
- enemys[amountEnemy].dxSpeed = directions[1].x;
- }
- enemys[amountEnemy]._xEnemy -= enemys[amountEnemy].dxSpeed
- } else {
- if (enemys[amountEnemy].dySpeed < 0) {
- enemys[amountEnemy].dySpeed = directions[2].y;
- } else {
- enemys[amountEnemy].dySpeed = directions[3].y;
- }
- enemys[amountEnemy]._yEnemy -= enemys[amountEnemy].dySpeed
- }
- }
-
- if (((enemys[amountEnemy]._xEnemy + 10 > packman._x) && (enemys[amountEnemy]._xEnemy <= packman._x + 23)) && ((enemys[amountEnemy]._yEnemy + 10 > packman._y) && (enemys[amountEnemy]._yEnemy <= packman._y + 23))) {
- atacks = true;
- }
-
- } */
-
-/*
- this.redrawEnemy = function () {
-
- if (checkCollisions(this)) {
-
- if (this.dySpeed != 0) {
- if (randomInteger(0, 1)) {
- this.dxSpeed = 1
- } else {
- this.dxSpeed = -1
- }
- this.dySpeed = 0;
- } else {
- if (this.dxSpeed != 0) {
- if (randomInteger(0, 1)) {
- this.dySpeed = 1
- } else {
- this.dySpeed = -1
- }
- this.dxSpeed = 0;
- }
- }
- }
-
- this._x += this.dxSpeed;
- this._y += this.dySpeed;
- } */
