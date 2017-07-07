@@ -138,9 +138,6 @@ function findDirection(event) {
       packman.path = DIRECTION_SPRITE_PACKMAN_LEFT;
       packman.updateImg();
       break;
-    case keys['SPACE']:
-      game.pause = true;
-      break;
   }
 }
 

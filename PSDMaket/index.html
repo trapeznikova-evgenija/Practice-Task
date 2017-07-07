@@ -48,12 +48,19 @@
     <div class="menu">
       <div class="container">
         <div class="main_logo"><img src="image/logo.png" alt="logo REEN"></div>
-          <ul class="nav">
-            <li class="nav_li"><a id='about' href="#navabout" class="menu_name">ABOUT US</a></li>
-            <li class="nav_li"><a href="#navworks" class="menu_name">LATEST WORKS</a></li>
-            <li class="nav_li"><a href="#navtouch" class="menu_name">GET IN TOUCH</a></li>
-            <li class="nav_li"><a href="#" id="contact_us" class="menu_name">CONTACT US</a></li>
-          </ul>
+          <div class="navbar_block">
+            <div class="hamburg_button">
+              <div class="link_bar"></div>
+              <div class="link_bar"></div>
+              <div class="link_bar"></div>
+            </div>
+            <ul class="nav">
+              <li class="nav_li"><a id='about' href="#navabout" class="menu_name">ABOUT US</a></li>
+              <li class="nav_li"><a href="#navworks" class="menu_name">LATEST WORKS</a></li>
+              <li class="nav_li"><a href="#navtouch" class="menu_name">GET IN TOUCH</a></li>
+              <li class="nav_li"><a href="#" id="contact_us" class="menu_name">CONTACT US</a></li>
+            </ul>
+          </div>
         <div class="standart_icon"></div>
       </div>
       </div>
@@ -212,7 +219,7 @@
       </div>
       </section>
       <section id="navworks">
-      <div class="latest_works">
+      <div id="latestWorks" class="latest_works">
         <div class="container">
           <div class="main_title_style">Check out our latest works</div>
           <div class="main_subtitle">Magnis modipsae que voloratati andigen daepeditem quiate re porem aut labor.</div>
@@ -244,7 +251,7 @@
       </div>
       </section>
       <section id="navtouch">
-      <div class="get_touch">
+      <div id="getTouch" class="get_touch">
         <div class="container">
           <div class="main_title_style">Want to work with us?</div>
           <div class="main_subtitle">
@@ -256,7 +263,7 @@
       </div>
       </section>
     </div>
-    <div class="footer">
+    <div id="footer" class="footer">
       <div class="container">
         <div class="wrapper_footer">
           <div class="footer_who_we line_block" >
@@ -336,8 +343,9 @@
       </div>
   <script src="js/jquery-3.2.1.js"></script>
   <script src="js/slider.js"></script>
-  <script src="js/appearance.js"></script>
+  <script src="js/mobileTopMenu.js"></script>
   <script src="js/smoothScroll.js"></script>
+  <script src="js/appearance.js"></script>
   <script src="js/showMore.js"></script>
   <script src="js/rollUp.js"></script>
   <script src="js/modalWindow.js"></script>

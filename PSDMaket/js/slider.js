@@ -4,7 +4,6 @@ var translateWidth = 0;
 var slideInterval = 7000;
 var navButtonId = 0;
 
-
 $(document).ready(function () {
   var switchInterval = setInterval(nextSlide, slideInterval);
   $('#viewport').hover(function () {
@@ -35,8 +34,7 @@ $(document).ready(function () {
 
   $('.slide_nav_button').click(function() {
     navButtonId = $(this).index();
-
-
+    
     if (navButtonId + 1 != slideNow) {
       $('#point_color' + slideNow).css('background-color', '#506a85');
       translateWidth = -$('#viewport').width() * (navButtonId);
