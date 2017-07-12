@@ -1,0 +1,101 @@
+body
+{
+    margin: 0;
+    padding: 0;
+}
+
+.piano_block
+{
+    position: absolute;
+    left: 20%;
+    top: 30%;
+}
+
+.first_octave
+{
+    margin: 0 auto;
+    position: relative;
+}
+
+.white_key
+{
+    background-color: whitesmoke;
+    border: 2px solid black;
+    border-radius: 3px;
+    width: 40px;
+    height: 110px;
+    display: inline-block;
+    position: relative;
+    margin-right: -16px;
+}
+
+.black_key
+{
+    background-color: black;
+    border-radius: 2px;
+    width: 20px;
+    height: 70px;
+    display: inline-block;
+    position: relative;
+    z-index: 3;
+    bottom: 42px;
+}
+
+.do
+{
+}
+
+.do_diez
+{
+
+}
+
+.re
+{
+    right: 14px;
+}
+
+.re_diez
+{
+    right: 13px;
+}
+
+.mi
+{
+    right: 28px;
+}
+
+.fa
+{
+    right: 18px;
+}
+
+.fa_diez
+{
+    right: 17px;
+}
+
+.sol
+{
+    right: 32px;
+}
+
+.sol_diez
+{
+    right: 31px;
+}
+
+.lya
+{
+    right: 46px;
+}
+
+.lya_diez
+{
+    right: 45px;
+}
+
+.si
+{
+    right: 60px;
+}

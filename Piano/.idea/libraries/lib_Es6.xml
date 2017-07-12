@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="lib.Es6" type="javaScript">
+    <CLASSES />
+    <DOCUMENTATION>
+      <root url="https://github.com/Microsoft/TypeScript/blob/master/lib/lib.es6.d.ts" />
+    </DOCUMENTATION>
+    <SOURCES />
+  </library>
+</component>
