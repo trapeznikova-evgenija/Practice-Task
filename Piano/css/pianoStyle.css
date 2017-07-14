@@ -6,16 +6,40 @@ body
 
 .piano_block
 {
-    position: absolute;
-    left: 20%;
-    top: 30%;
+    position: relative;
+    top: 130px;
+    left: 50px;
+}
+
+.big_octave
+{
+    float: left;
+}
+
+.small_octave
+{
+    position: relative;
+    right: 261px;
 }
 
 .first_octave
 {
     margin: 0 auto;
     position: relative;
+    left: 588px;
+    bottom: 118px;
+    /*right: 261px; */
 }
+
+.second_octave
+{
+    z-index: 1;
+    position: relative;
+    left: 882px;
+    bottom: 236px;
+
+}
+
 
 .white_key
 {
@@ -26,7 +50,7 @@ body
     height: 110px;
     display: inline-block;
     position: relative;
-    margin-right: -16px;
+    margin-right: -6px;
 }
 
 .black_key
@@ -37,8 +61,10 @@ body
     height: 70px;
     display: inline-block;
     position: relative;
-    z-index: 3;
+    z-index: 1;
     bottom: 42px;
+    right: 261px;
+    margin-right: 29px;
 }
 
 .do
@@ -57,7 +83,7 @@ body
 
 .re_diez
 {
-    right: 13px;
+    right: 272px;
 }
 
 .mi
@@ -72,7 +98,7 @@ body
 
 .fa_diez
 {
-    right: 17px;
+    right: 240px;
 }
 
 .sol
@@ -82,7 +108,7 @@ body
 
 .sol_diez
 {
-    right: 31px;
+    right: 251px;
 }
 
 .lya

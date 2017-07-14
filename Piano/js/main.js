@@ -2,59 +2,70 @@
 
 let context = new AudioContext();
 
-addEventListener('keydown', play);
+let firstOctave = document.getElementById('firstOctave');
+let secondOctave = document.getElementById('secondOctave');
+let notesFirstOctave = firstOctave.querySelectorAll('div');
+let notesSecondOctave = secondOctave.querySelectorAll('div');
+let piano = document.getElementById('piano');
+let notesPiano = piano.querySelectorAll('div');
 
-function play(event) {
-  let firstOctave = { 'D': 261.63, 'Ds': 277.18, 'Re': 293.66, 'Res': 311.13, 'Mi': 329.63, 'Fa': 349.23,
-                    'Fas': 369.99, 'Sol': 392, 'Sols': 415.3, 'Lya': 440, 'Lyas': 466.16, 'Si': 493.88};
-  let oscillator = context.createOscillator();
+$(function () {
+  $('#piano *').each(function () {
+    addProperties(this);
+  });
 
-  switch (event.keyCode) {
-    case keys['Q']:
-      oscillator.frequency.value = firstOctave.D;
-      break;
-    case keys['R']:
-      oscillator.frequency.value = firstOctave.Ds;
-      break;
-    case keys['S']:
-      oscillator.frequency.value = firstOctave.Re;
-      break;
-    case keys['T']:
-      oscillator.frequency.value = firstOctave.Res;
-      break;
-    case keys['U']:
-      oscillator.frequency.value = firstOctave.Mi;
-      break;
-    case keys['Y']:
-      oscillator.frequency.value = firstOctave.Fa;
-      break;
-    case keys['I']:
-      oscillator.frequency.value = firstOctave.Fas;
-      break;
-    case keys['O']:
-      oscillator.frequency.value = firstOctave.Sol;
-      break;
-    case keys['P']:
-      oscillator.frequency.value = firstOctave.Sols;
-      break;
-    case keys['A']:
-      oscillator.frequency.value = firstOctave.Lya;
-      break;
-    case keys['D']:
-      oscillator.frequency.value = firstOctave.Lyas;
-      break;
-    case keys['F']:
-      oscillator.frequency.value = firstOctave.Si;
-      break;
+  $('#piano *').click(function () {
+    this.play();
+    if (this.className === 'white_key') {
+      $(this).animate({opacity: '0.3'}, 100);
+      $(this).animate({opacity: '1'}, 100);
+    } else {
+      $(this).animate({opacity: '0.8'}, 100);
+      $(this).animate({opacity: '1'}, 100);
+    }
+  });
+
+  $('html').keydown(function (event) {
+    for (let i = 0; i <= notesPiano.length; i++) {
+      if (event.keyCode === $(notesPiano[i]).data('keycode')) {
+        notesPiano[i].play();
+        if (notesPiano[i].className === 'white_key') {
+          $(notesPiano[i]).animate({opacity: '0.3'}, 100);
+          $(notesPiano[i]).animate({opacity: '1'}, 100);
+        } else {
+          $(notesPiano[i]).animate({opacity: '0.8'}, 100);
+          $(notesPiano[i]).animate({opacity: '1'}, 100);
+        }
+      }
+    }
+  });
+
+});
+
+
+function loadAudio(object, url) {
+  let request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.responseType = 'arraybuffer';
+  
+  request.onload = function () {
+    context.decodeAudioData(request.response, function (buffer) {
+      object.buffer = buffer;
+    })
+  };
+
+  request.send();
+}
+
+function addProperties(object) {
+  object.name = object.id;
+  object.source = $(object).data('sound');
+  loadAudio(object, object.source);
+  object.play = function () {
+    let s = context.createBufferSource();
+    s.buffer = object.buffer;
+    s.connect(context.destination);
+    s.start(0);
+    object.s = s;
   }
-
-  oscillator.type = 'sine';
-  oscillator.connect(context.destination);
-  oscillator.start();
-  setTimeout(function () {
-    oscillator.stop(0);
-    oscillator.disconnect(context.destination);
-  }, 1000 / 2);
-
-  console.log(oscillator.frequency.value);
 }
