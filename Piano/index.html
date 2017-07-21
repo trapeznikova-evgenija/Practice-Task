@@ -3,65 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <title>Piano for the soul</title>
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
   <link type="text/css" href="css/pianoStyle.css" rel="stylesheet">
 </head>
 <body>
-  <div id="piano" class="piano_block">
-    <div class="big_octave">
-      <div data-keycode="53" data-sound="Notes/C1_Большая/C1_Do.wav" class="white_key do"></div>
-      <div data-keycode="54" data-sound="Notes/C1_Большая/C1_Re.wav" class="white_key"></div>
-      <div data-keycode="55" data-sound="Notes/C1_Большая/C1_Mi.wav" class="white_key"></div>
-      <div data-keycode="56" data-sound="Notes/C1_Большая/C1_Fa.wav" class="white_key"></div>
-      <div data-keycode="57" data-sound="Notes/C1_Большая/C1_Sol.wav" class="white_key"></div>
-      <div data-keycode="48" data-sound="Notes/C1_Большая/C1_Lya.wav" class="white_key"></div>
-      <div data-keycode="189" data-sound="Notes/C1_Большая/C1_Si.wav" class="white_key"></div>
-      <div data-keycode="187" data-sound="Notes/C1_Большая/C1_DoDiez.wav" class="black_key"></div>
-      <div data-keycode="" data-sound="Notes/C1_Большая/C1_ReDiez.wav" class="black_key re_diez"></div>
-      <div data-keycode="" data-sound="Notes/C1_Большая/C1_FaDiez.wav" class="black_key fa_diez"></div>
-      <div data-keycode="" data-sound="Notes/C1_Большая/C1_SolDiez.wav" class="black_key sol_diez"></div>
-      <div data-keycode="" data-sound="Notes/C1_Большая/C1_LyaDiez.wav" class="black_key"></div>
+  <div class="container">
+    <div id="piano" class="piano_block">
+      <div class="contr_octave">
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_Do.wav" class="white_key do"></div>
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_Re.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_Mi.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_Fa.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_Sol.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_Lya.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_Si.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_DoDiez.wav" class="black_key"></div>
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_ReDiez.wav" class="black_key re_diez"></div>
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_FaDiez.wav" class="black_key fa_diez"></div>
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_SolDiez.wav" class="black_key sol_diez"></div>
+        <div data-keycode="" data-sound="notes/c0_contrOctave/C0_LyaDiez.wav" class="black_key"></div>
+      </div>
+      <div class="big_octave active_octave_left">
+        <div data-keycode="81" data-sound="notes/c1_bigOctave/C1_Do.wav" class="white_key do"></div>
+        <div data-keycode="87" data-sound="notes/c1_bigOctave/C1_Re.wav" class="white_key"></div>
+        <div data-keycode="69" data-sound="notes/c1_bigOctave/C1_Mi.wav" class="white_key"></div>
+        <div data-keycode="82" data-sound="notes/c1_bigOctave/C1_Fa.wav" class="white_key"></div>
+        <div data-keycode="84" data-sound="notes/c1_bigOctave/C1_Sol.wav" class="white_key"></div>
+        <div data-keycode="89" data-sound="notes/c1_bigOctave/C1_Lya.wav" class="white_key"></div>
+        <div data-keycode="85" data-sound="notes/c1_bigOctave/C1_Si.wav" class="white_key"></div>
+        <div data-keycode="73" data-sound="notes/c1_bigOctave/C1_DoDiez.wav" class="black_key"></div>
+        <div data-keycode="79" data-sound="notes/c1_bigOctave/C1_ReDiez.wav" class="black_key re_diez"></div>
+        <div data-keycode="80" data-sound="notes/c1_bigOctave/C1_FaDiez.wav" class="black_key fa_diez"></div>
+        <div data-keycode="219" data-sound="notes/c1_bigOctave/C1_SolDiez.wav" class="black_key sol_diez"></div>
+        <div data-keycode="221" data-sound="notes/c1_bigOctave/C1_LyaDiez.wav" class="black_key"></div>
+      </div>
+      <div class="small_octave active_octave_right">
+        <div data-keycode="67" data-sound="notes/c2_smallOctave/C2_Do.wav" class="white_key do"></div>
+        <div data-keycode="86" data-sound="notes/c2_smallOctave/C2_Re.wav" class="white_key"></div>
+        <div data-keycode="66" data-sound="notes/c2_smallOctave/C2_Mi.wav" class="white_key"></div>
+        <div data-keycode="78" data-sound="notes/c2_smallOctave/C2_Fa.wav" class="white_key"></div>
+        <div data-keycode="77" data-sound="notes/c2_smallOctave/C2_Sol.wav" class="white_key"></div>
+        <div data-keycode="188" data-sound="notes/c2_smallOctave/C2_Lya.wav" class="white_key"></div>
+        <div data-keycode="190" data-sound="notes/c2_smallOctave/C2_Si.wav" class="white_key"></div>
+        <div data-keycode="191" data-sound="notes/c2_smallOctave/C2_DoDiez.wav" class="black_key"></div>
+        <div data-keycode="49" data-sound="notes/c2_smallOctave/C2_ReDiez.wav" class="black_key re_diez"></div>
+        <div data-keycode="50" data-sound="notes/c2_smallOctave/C2_FaDiez.wav" class="black_key fa_diez"></div>
+        <div data-keycode="51" data-sound="notes/c2_smallOctave/C2_SolDiez.wav" class="black_key sol_diez"></div>
+        <div data-keycode="52" data-sound="notes/c2_smallOctave/C2_LyaDiez.wav" class="black_key"></div>
+      </div>
+      <div id="firstOctave" class="first_octave">
+        <div id="dNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_Do.wav" class="white_key do"></div>
+        <div id="reNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_Re.wav" class="white_key"></div>
+        <div id="miNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_Mi.wav" class="white_key"></div>
+        <div id="faNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_Fa.wav" class="white_key"></div>
+        <div id="solNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_Sol.wav" class="white_key"></div>
+        <div id="lyaNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_Lya.wav" class="white_key"></div>
+        <div id="siNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_Si.wav" class="white_key"></div>
+        <div id="doDiezNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_DoDiez.wav" class="black_key"></div>
+        <div id="reDiezNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_ReDiez.wav" class="black_key re_diez"></div>
+        <div id="faDiezNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_FaDiez.wav" class="black_key fa_diez"></div>
+        <div id="solDiezNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_SolDiez.wav" class="black_key sol_diez"></div>
+        <div id="lyaDiezNote" data-keycode="" data-sound="notes/c3_firstOctave/C3_LyaDiez.wav" class="black_key"></div>
+      </div>
+      <div id="secondOctave" class="second_octave">
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_Do.wav" class="white_key do"></div>
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_Re.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_Mi.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_Fa.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_Sol.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_Lya.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_Si.wav" class="white_key"></div>
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_DoDiez.wav" class="black_key"></div>
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_ReDiez.wav" class="black_key re_diez"></div>
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_FaDiez.wav" class="black_key fa_diez"></div>
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_SolDiez.wav" class="black_key sol_diez"></div>
+        <div data-keycode="" data-sound="notes/c4_secondOctave/C4_LyaDiez.wav" class="black_key"></div>
+      </div>
     </div>
-    <div class="small_octave">
-      <div data-keycode="67" data-sound="Notes/C2_Малая/C2_Do.wav" class="white_key do"></div>
-      <div data-keycode="86" data-sound="Notes/C2_Малая/C2_Re.wav" class="white_key"></div>
-      <div data-keycode="66" data-sound="Notes/C2_Малая/C2_Mi.wav" class="white_key"></div>
-      <div data-keycode="78" data-sound="Notes/C2_Малая/C2_Fa.wav" class="white_key"></div>
-      <div data-keycode="77" data-sound="Notes/C2_Малая/C2_Sol.wav" class="white_key"></div>
-      <div data-keycode="188" data-sound="Notes/C2_Малая/C2_Lya.wav" class="white_key"></div>
-      <div data-keycode="190" data-sound="Notes/C2_Малая/C2_Si.wav" class="white_key"></div>
-      <div data-keycode="191" data-sound="Notes/C2_Малая/C2_DoDiez.wav" class="black_key"></div>
-      <div data-keycode="49" data-sound="Notes/C2_Малая/C2_ReDiez.wav" class="black_key re_diez"></div>
-      <div data-keycode="50" data-sound="Notes/C2_Малая/C2_FaDiez.wav" class="black_key fa_diez"></div>
-      <div data-keycode="51" data-sound="Notes/C2_Малая/C2_SolDiez.wav" class="black_key sol_diez"></div>
-      <div data-keycode="52" data-sound="Notes/C2_Малая/C2_LyaDiez.wav" class="black_key"></div>
-    </div>
-    <div id="firstOctave" class="first_octave">
-      <div id="dNote" data-keycode="81" data-sound="Notes/C3_Первая/C3_Do.wav" class="white_key do"></div>
-      <div id="reNote" data-keycode="87" data-sound="Notes/C3_Первая/C3_Re.wav" class="white_key"></div>
-      <div id="miNote" data-keycode="69" data-sound="Notes/C3_Первая/C3_Mi.wav" class="white_key"></div>
-      <div id="faNote" data-keycode="82" data-sound="Notes/C3_Первая/C3_Fa.wav" class="white_key"></div>
-      <div id="solNote" data-keycode="84" data-sound="Notes/C3_Первая/C3_Sol.wav" class="white_key"></div>
-      <div id="lyaNote" data-keycode="89" data-sound="Notes/C3_Первая/C3_Lya.wav" class="white_key"></div>
-      <div id="siNote" data-keycode="85" data-sound="Notes/C3_Первая/C3_Si.wav" class="white_key"></div>
-      <div id="doDiezNote" data-keycode="73" data-sound="Notes/C3_Первая/C3_DoDiez.wav" class="black_key"></div>
-      <div id="reDiezNote" data-keycode="79" data-sound="Notes/C3_Первая/C3_ReDiez.wav" class="black_key re_diez"></div>
-      <div id="faDiezNote" data-keycode="80" data-sound="Notes/C3_Первая/C3_FaDiez.wav" class="black_key fa_diez"></div>
-      <div id="solDiezNote" data-keycode="219" data-sound="Notes/C3_Первая/C3_SolDiez.wav" class="black_key sol_diez"></div>
-      <div id="lyaDiezNote" data-keycode="221" data-sound="Notes/C3_Первая/C3_LyaDiez.wav" class="black_key"></div>
-    </div>
-    <div id="secondOctave" class="second_octave">
-      <div data-keycode="65" data-sound="Notes/C4_Вторая/C4_Do.wav" class="white_key do"></div>
-      <div data-keycode="83" data-sound="Notes/C4_Вторая/C4_Re.wav" class="white_key"></div>
-      <div data-keycode="68" data-sound="Notes/C4_Вторая/C4_Mi.wav" class="white_key"></div>
-      <div data-keycode="70" data-sound="Notes/C4_Вторая/C4_Fa.wav" class="white_key"></div>
-      <div data-keycode="71" data-sound="Notes/C4_Вторая/C4_Sol.wav" class="white_key"></div>
-      <div data-keycode="72" data-sound="Notes/C4_Вторая/C4_Lya.wav" class="white_key"></div>
-      <div data-keycode="74" data-sound="Notes/C4_Вторая/C4_Si.wav" class="white_key"></div>
-      <div data-keycode="75" data-sound="Notes/C4_Вторая/C4_DoDiez.wav" class="black_key"></div>
-      <div data-keycode="76" data-sound="Notes/C4_Вторая/C4_ReDiez.wav" class="black_key re_diez"></div>
-      <div data-keycode="186" data-sound="Notes/C4_Вторая/C4_FaDiez.wav" class="black_key fa_diez"></div>
-      <div data-keycode="90" data-sound="Notes/C4_Вторая/C4_SolDiez.wav" class="black_key sol_diez"></div>
-      <div data-keycode="88" data-sound="Notes/C4_Вторая/C4_LyaDiez.wav" class="black_key"></div>
+    <div class="octave_menu">
+      <p class="name_window">Octave menu</p>
+      <div class="octave_menu_left">
+        <p class="name_direction">Left</p>
+        <p class="name_direction octave_menu_controctave_left">Contr</p>
+        <p class="name_direction octave_menu_big_left">Big</p>
+        <p class="name_direction octave_menu_small_left">Small</p>
+        <p class="name_direction octave_menu_first_left">First</p>
+        <p class="name_direction octave_menu_second_left">Second</p>
+      </div>
+      <div class="octave_menu_right">
+        <p class="name_direction">Right</p>
+        <p class="name_direction octave_menu_controctave_right">Contr</p>
+        <p class="name_direction octave_menu_big_right">Big</p>
+        <p class="name_direction octave_menu_small_right">Small</p>
+        <p class="name_direction octave_menu_first_right">First</p>
+        <p class="name_direction octave_menu_second_right">Second</p>
+      </div>
+      <div class="clear"></div>
+      <div class="button_left_octave">
+        <button id="buttonMenuLeftLoctave" class="button_left_arrow" type="button"></button>
+        <button id="buttonMenuRightLoctave" class="button_right_arrow" type="button"></button>
+      </div>
+      <div class="button_right_octave">
+        <button id="buttonMenuLeftRoctave" class="button_left_arrow" type="button"></button>
+        <button id="buttonMenuRightRoctave" class="button_right_arrow" type="button"></button>
+      </div>
     </div>
   </div>
   <script src="js/jquery-3.2.1.js"></script>

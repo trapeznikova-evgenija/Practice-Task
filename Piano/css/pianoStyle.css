@@ -4,42 +4,72 @@ body
     padding: 0;
 }
 
+.container
+{
+    max-width: 1300px;
+    width: 100%;
+    margin: 0 auto;
+}
+
 .piano_block
 {
     position: relative;
-    top: 130px;
-    left: 50px;
+    top: 440px;
+    width: 45%;
+    margin: 0 auto;
+}
+
+.contr_octave
+{
+    display: none;
+}
+
+.hidden
+{
+    display: none;
 }
 
 .big_octave
 {
-    float: left;
+    display: none;
 }
 
 .small_octave
 {
-    position: relative;
-    right: 261px;
+    display: none;
 }
 
 .first_octave
 {
-    margin: 0 auto;
+  /*  margin: 0 auto;
     position: relative;
     left: 588px;
-    bottom: 118px;
-    /*right: 261px; */
+    bottom: 118px; */
+    display: none;
 }
 
 .second_octave
 {
-    z-index: 1;
+  /*  z-index: 1;
     position: relative;
     left: 882px;
-    bottom: 236px;
-
+    bottom: 236px; */
+    display: none;
 }
 
+.active_octave_left
+{
+    display: inline-block;
+}
+
+.active_octave_right
+{
+    display: inline-block;
+    position: relative;
+    left: 294px;
+    z-index: 1;
+    bottom: 118px;
+}
 
 .white_key
 {
@@ -66,14 +96,74 @@ body
     right: 261px;
     margin-right: 29px;
 }
-
-.do
+.clear
 {
+    clear: both;
 }
 
-.do_diez
+.octave_menu
 {
+    width: 300px;
+    float: right;
+    font-family: 'Indie Flower', cursive;
+    font-size: 18px;
+}
 
+.name_window
+{
+    text-align: center;
+    margin-bottom: 0;
+
+}
+
+.name_direction
+{
+    display: inline-block;
+    width: 48%;
+    text-align: center;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+.octave_menu_controctave_left, .octave_menu_controctave_right,
+.octave_menu_first_left, .octave_menu_first_right,
+.octave_menu_second_left,.octave_menu_second_right, .octave_menu_big_right, .octave_menu_small_left
+{
+    display: none;
+}
+
+.button_left_octave
+{
+    padding-left: 39px;
+    display: inline-block;
+    width: 50%;
+    margin-top: 9px;
+}
+
+.button_right_octave
+{
+    display: inline-block;
+}
+
+.button_left_arrow
+{
+    width: 32px;
+    height: 31px;
+    background: url("../image/arrow.jpeg") no-repeat -4px -7px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.button_right_arrow
+{
+    width: 32px;
+    height: 31px;
+    background: url("../image/arrow.jpeg") no-repeat -44px -7px;
+    border: none;
+    user-select:none;
+    outline: none;
+    cursor: pointer;
 }
 
 .re
