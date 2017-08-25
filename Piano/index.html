@@ -8,6 +8,11 @@
 </head>
 <body>
   <div class="container">
+    <div class="block_for_tips">
+      <div class="tile"></div>
+      <div class="tile tile_re"></div>
+      <div class="tile tile_mi"></div>
+    </div>
     <div id="piano" class="piano_block">
       <div class="contr_octave">
         <div data-keycode="" data-sound="notes/c0_contrOctave/C0_Do.wav" class="white_key do"></div>
@@ -23,7 +28,7 @@
         <div data-keycode="" data-sound="notes/c0_contrOctave/C0_SolDiez.wav" class="black_key sol_diez"></div>
         <div data-keycode="" data-sound="notes/c0_contrOctave/C0_LyaDiez.wav" class="black_key"></div>
       </div>
-      <div class="big_octave active_octave_left">
+      <div class="big_octave">
         <div data-keycode="81" data-sound="notes/c1_bigOctave/C1_Do.wav" class="white_key do"></div>
         <div data-keycode="87" data-sound="notes/c1_bigOctave/C1_Re.wav" class="white_key"></div>
         <div data-keycode="69" data-sound="notes/c1_bigOctave/C1_Mi.wav" class="white_key"></div>
@@ -37,7 +42,7 @@
         <div data-keycode="219" data-sound="notes/c1_bigOctave/C1_SolDiez.wav" class="black_key sol_diez"></div>
         <div data-keycode="221" data-sound="notes/c1_bigOctave/C1_LyaDiez.wav" class="black_key"></div>
       </div>
-      <div class="small_octave active_octave_right">
+      <div class="small_octave">
         <div data-keycode="67" data-sound="notes/c2_smallOctave/C2_Do.wav" class="white_key do"></div>
         <div data-keycode="86" data-sound="notes/c2_smallOctave/C2_Re.wav" class="white_key"></div>
         <div data-keycode="66" data-sound="notes/c2_smallOctave/C2_Mi.wav" class="white_key"></div>
@@ -109,8 +114,8 @@
       </div>
     </div>
   </div>
-  <script src="js/jquery-3.2.1.js"></script>
-  <script src="js/nameKey.js"></script>
-  <script src="js/main.js"></script>
+  <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+  <script type="text/javascript" src="js/nameKey.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

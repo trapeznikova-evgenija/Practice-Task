@@ -1,0 +1,55 @@
+.container
+{
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.block_for_rect
+{
+    width: 400px;
+    height: 200px;
+    background-color: beige;
+    margin: 0 auto;
+}
+
+.rect
+{
+    background-color: darkolivegreen;
+    border-radius: 5px;
+    width: 30px;
+    height: 20px;
+    position: relative;
+    top: 0;
+    display: inline-block;
+}
+
+.rect_re
+{
+    left: 10px;
+}
+
+.rect_mi
+{
+    left: 20px;
+}
+
+.rect_fa
+{
+    left: 30px;
+}
+
+.rect_sol
+{
+    left: 40px;
+}
+
+.rect_ly
+{
+    left: 50px;
+}
+
+.rect_si
+{
+    left: 60px;
+}

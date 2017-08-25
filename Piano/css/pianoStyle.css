@@ -14,9 +14,10 @@ body
 .piano_block
 {
     position: relative;
-    top: 440px;
+    /*top: 440px; */
     width: 45%;
     margin: 0 auto;
+    left: 145px;
 }
 
 .contr_octave
@@ -45,7 +46,7 @@ body
     position: relative;
     left: 588px;
     bottom: 118px; */
-    display: none;
+    display: block;
 }
 
 .second_octave
@@ -55,20 +56,6 @@ body
     left: 882px;
     bottom: 236px; */
     display: none;
-}
-
-.active_octave_left
-{
-    display: inline-block;
-}
-
-.active_octave_right
-{
-    display: inline-block;
-    position: relative;
-    left: 294px;
-    z-index: 1;
-    bottom: 118px;
 }
 
 .white_key
@@ -101,12 +88,41 @@ body
     clear: both;
 }
 
+.block_for_tips
+{
+    width: 295px;
+    height: 430px;
+    background-color: cadetblue;
+    margin: 0 auto;
+}
+
+.tile
+{
+    background-color: brown;
+    border-radius: 5px;
+    width: 30px;
+    height: 20px;
+    position: relative;
+    top: 0;
+    display: inline-block;
+}
+
+.tile_re
+{
+    left: 10px;
+}
+.tile_mi
+{
+    left: 20px;
+}
+
 .octave_menu
 {
     width: 300px;
     float: right;
     font-family: 'Indie Flower', cursive;
     font-size: 18px;
+    display: none;
 }
 
 .name_window

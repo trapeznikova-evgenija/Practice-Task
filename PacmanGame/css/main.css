@@ -11,6 +11,49 @@ body {
     background: url("../image/background.jpg")
 }
 
+#getReadyBlock {
+    background-color: black;
+    color: white;
+    font-family: 'Patrick Hand SC', cursive;
+    font-size: 24px;
+    width: 94px;
+    height: 30px;
+    display: none;
+    position: absolute;
+    bottom: 400px;
+    z-index: 10000;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    margin-left: -42px;
+
+}
+
+#next_level {
+    background-color: rgba(0, 120, 199, 0.7);
+    width: 822px;
+    height: 579px;
+    display: none;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.next_level_button
+{
+    width: 164px;
+    margin-top: 10px;
+    font-family: 'Patrick Hand SC', cursive;
+    font-size: 30px;
+    border: none;
+    border-radius: 6px;
+    background-color: rgba(224, 213, 0, 1);
+    border-bottom: 2px solid darkred;
+    position: relative;
+    top: 124px;
+    cursor: pointer;
+}
+
 #game_over_won {
     background-color: rgba(0, 120, 199, 0.7);
     width: 822px;
@@ -59,6 +102,14 @@ body {
     font-size: 60px;
     position: relative;
     margin-top: -71px;
+    margin-left: 160px;
+}
+
+.font_for_score_next_level {
+    font-family: 'Patrick Hand SC', cursive;
+    font-size: 60px;
+    position: relative;
+    margin-top: -36px;
     margin-left: 160px;
 }
 
