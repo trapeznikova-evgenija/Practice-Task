@@ -11,7 +11,7 @@ var PACMAN_PICTURE_SIZE = 23;
 var MELON_PICTURE_HEIGHT = 18;
 var FOOD_PICTURE_SIZE = 29;
 var NUMBER_OF_ENEMIES = 4;
-var VICTORY_SCORE = 137;
+var VICTORY_SCORE = 128;
 
 var canvas;
 var context;
@@ -27,6 +27,7 @@ var getReady = document.getElementById('getReadyBlock');
 var game = new Game();
 
 var bonus = false;
+var counterScore = 0;
 
 var packman = new Packman(26, 51, 0, 0, 0, 105, 105, 6, 4, DIRECTION_SPRITE_PACKMAN_RIGHT);
 
@@ -165,6 +166,7 @@ function drawFood(context, foodFile, strawFile, setStraw, setMelon, packman) {
          }
          if (((packman._x + MELON_PICTURE_HEIGHT > setMelon[k].xStatic) && (packman._x <= setMelon[k].xStatic + MELON_PICTURE_HEIGHT)) && ((packman._y + MELON_PICTURE_HEIGHT > setMelon[k].yStatic) && (packman._y <= setMelon[k].yStatic + MELON_PICTURE_HEIGHT)))  {
            delete setMelon[k].xStatic;
+           counterScore++;
            delete setMelon[k].yStatic;
            packman._score += 1;
          }
@@ -181,6 +183,7 @@ function drawFood(context, foodFile, strawFile, setStraw, setMelon, packman) {
         if (((packman._x + MELON_PICTURE_HEIGHT > setStraw[m].x) && (packman._x <= setStraw[m].x + MELON_PICTURE_HEIGHT)) && ((packman._y + MELON_PICTURE_HEIGHT > setStraw[m].y) && (packman._y <= setStraw[m].y + MELON_PICTURE_HEIGHT)))  {
           bonus = true;
           delete setStraw[m].x;
+          counterScore++;
           delete setStraw[m].y;
           packman._score += 3;
         }
@@ -188,6 +191,8 @@ function drawFood(context, foodFile, strawFile, setStraw, setMelon, packman) {
     }
   };
   strawImage.src = strawFile;
+
+  console.log(counterScore);
 }
 
 function StaticFood(x, y) {
@@ -251,7 +256,7 @@ function checkCollisionsEnemy(enemyNumber, context) {
     var green = pixels[i + 1];
     var blue = pixels[i + 2];
 
-    if (((red > 1) && (red < 15)) && ((green > 90) && (green < 110)) && ((blue > 190) && (blue < 206))) {
+    if (((red > 1) && (red < 20)) && ((green > 80) && (green < 120)) && ((blue > 180) && (blue < 215))) {
       return true;
     }
   }
@@ -267,7 +272,7 @@ function checkCollisions(packman, context) {
     var green = pixels[i + 1];
     var blue = pixels[i + 2];
 
-    if (((red > 1) && (red < 15)) && ((green > 90) && (green < 110)) && ((blue > 190) && (blue < 206)))  {
+    if (((red > 1) && (red < 20)) && ((green > 80) && (green < 120)) && ((blue > 180) && (blue < 215)))  {
       return true;
     }
   }
@@ -422,18 +427,18 @@ function Packman(x, y, dx, dy, score, frameWidth, frameHeight, frameSpeed, endFr
 
     switch (event.keyCode) {
       case keys['RIGHT']:
-        packman.dx = 2;
+        packman.dx = 3;
         packman.path = DIRECTION_SPRITE_PACKMAN_RIGHT;
         packman.updateImg();
         break;
       case keys['DOWN']:
-        packman.dy = 2;
+        packman.dy = 3;
         break;
       case keys['UP']:
-        packman.dy = -2;
+        packman.dy = -3;
         break;
       case keys['LEFT']:
-        packman.dx = -2;
+        packman.dx = -3;
         packman.path = DIRECTION_SPRITE_PACKMAN_LEFT;
         packman.updateImg();
         break;
@@ -535,9 +540,8 @@ function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy) {
       game.curStatus = 2;
     } else if (((this._xEnemy + ENEMY_PICTURE_WIDTH > packman._x) && (this._xEnemy <= packman._x + PACMAN_PICTURE_SIZE)) && ((this._yEnemy + ENEMY_PICTURE_WIDTH > packman._y) && (this._yEnemy <= packman._y + PACMAN_PICTURE_SIZE)) && (bonus)) {
       packman._score += 1;
-    } else if (packman._score >= VICTORY_SCORE) {
+    } else if (counterScore === VICTORY_SCORE) {
       game.curStatus = 4;
     }
-
   }
 }
