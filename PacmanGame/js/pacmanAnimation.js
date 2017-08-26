@@ -11,6 +11,7 @@ var PACMAN_PICTURE_SIZE = 23;
 var MELON_PICTURE_HEIGHT = 18;
 var FOOD_PICTURE_SIZE = 29;
 var NUMBER_OF_ENEMIES = 4;
+var NUMBER_OF_LIVES = 3;
 var VICTORY_SCORE = 128;
 
 var canvas;
@@ -27,11 +28,13 @@ var getReady = document.getElementById('getReadyBlock');
 var game = new Game();
 
 var bonus = false;
+var existenceOfLives = false;
 var counterScore = 0;
 
 var packman = new Packman(26, 51, 0, 0, 0, 105, 105, 6, 4, DIRECTION_SPRITE_PACKMAN_RIGHT);
 
 var enemies = [];
+var lives = [];
 
 window.onload = function () {
 
@@ -42,6 +45,7 @@ window.onload = function () {
   canvas.height = CANVAS_HEIGHT;
 
   createStaticFood();
+  createObjectLive();
   startButton.addEventListener('click', game.startTheGame);
 
 };
@@ -51,13 +55,8 @@ function animationTick() {
   drawMap(DIRECTION_MAP, 0, 0);
   drawFood(context, DIRECTION_FOOD, DIRECTION_SPRITE, setStrawberry, setMelon, packman);
   drawScore(packman, context);
+  //drawLive(DIRECTION_SPRITE_PACKMAN_RIGHT, context);
   packman.redraw();
-
-  if (bonus) {
-    setTimeout(function () {
-      bonus = false;
-    }, 5000);
-  }
 
   if (NUMBER_OF_ENEMIES === enemies.length) {
     drawEnemy(enemies, DIRECTION_SPRITE);
@@ -88,6 +87,39 @@ function drawScore(packman, context) {
     context.fillText("Score " + packman._score, 40, 24);
     context.closePath();
 }
+
+function createObjectLive() {
+  var live;
+  for (var x = 450; x < canvas.width - 15; x += 20) {
+    live = new Live(x, 8);
+    lives.push(live);
+  }
+}
+
+function Live(x, y) {
+  this.xLive = x;
+  this.yLive = y;
+}
+
+function drawLive(liveFile, context) {
+  var liveImage = new Image();
+  liveImage.onload = function () {
+    for (var i = 0; i < NUMBER_OF_LIVES; i++) {
+      if (lives[i].xLive !== undefined && lives[i].yLive !== undefined) {
+        context.drawImage(liveImage, 0, 0, 105, 105, lives[i].xLive, lives[i].yLive, 17, 17);
+      }
+    }
+  };
+  liveImage.src = liveFile;
+}
+
+function drawBlackRect(context) {
+    context.beginPath();
+    context.fillStyle = 'black';
+    context.fillRect(450, 8, 17, 17);
+    context.stroke();
+}
+
 
 function createStaticFood() {
   var foodNumber;
@@ -186,13 +218,14 @@ function drawFood(context, foodFile, strawFile, setStraw, setMelon, packman) {
           counterScore++;
           delete setStraw[m].y;
           packman._score += 3;
+          setTimeout(function () {
+            bonus = false;
+          }, 5000);
         }
       }
     }
   };
   strawImage.src = strawFile;
-
-  console.log(counterScore);
 }
 
 function StaticFood(x, y) {
@@ -220,7 +253,6 @@ function drawEnemy(enemies, imgEnemy) {
       } else {
         context.drawImage(enemyImage, enemies[i].xOnMap, enemies[i].yOnMap, enemies[i].widthOnMap, enemies[i].heightOnMap, enemies[i]._xEnemy, enemies[i]._yEnemy, enemies[i].enemyWidth, enemies[i].enemyHeight);
       }
-
     }
   };
   enemyImage.src = imgEnemy;
@@ -528,7 +560,6 @@ function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy) {
             randomDirection = randomInteger(0, 3);
           } while (randomDirection === 2)
       }
-
     }
 
     this.dxSpeed = directions[randomDirection].x;

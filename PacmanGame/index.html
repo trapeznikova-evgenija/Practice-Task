@@ -7,27 +7,44 @@
   <link href="https://fonts.googleapis.com/css?family=Patrick+Hand+SC" rel="stylesheet">
 </head>
 <body>
-  <div id="game_start">
+  <div class="wrapper">
+    <div id="descriptionWindow">
+      <h1 class="title">Watermelon Pacman</h1>
+      <a id="closeButton"><img src="image/button_close.png"></a>
+      <div class="clear"></div>
+      <p class="description_window_text">Пакман - круглое желтое существо, наделенное таким же желтым обаянием.
+        Управлять им можно при помощи стрелок на клавиатуре.
+      </p>
+      <p class="description_window_text">
+        Цель игры - съесть всю еду, набрав как можно больше очков, избегая привидений.
+        При съедании груши привидения становятся на некоторое время не активны и их тоже можно есть,
+        зарабатывая дополнительные очки.
+      </p>
+    </div>
+  </div>
+  <div id="game_start" class="common_styles">
     <div class="name_game">Watermelon Pacman!</div>
     <button id="startButton" class="button" type="button">Play</button>
+    <a href="#" id="description">Read Description</a>
   </div>
-  <div id="game_over_won">
+  <div id="game_over_won" class="common_styles">
     <div class="game_over_element_won">You won!</div>
     <div class="game_over_score">Score</div>
     <img class="melon" src="image/game_over_image.png">
   </div>
-  <div id="next_level">
+  <div id="next_level" class="common_styles">
     <div class="game_over_element_won">You won!</div>
     <div class="game_over_score">Score</div>
     <button id="nextLevel" class="next_level_button" type="button">Next Level</button>
   </div>
-  <div id="game_over_loser">
+  <div id="game_over_loser" class="common_styles">
     <div class="game_over_loser">Game Over</div>
     <div class="game_over_score">Score</div>
     <img class="melon" src="image/game_over_image.png">
   </div>
   <div id="getReadyBlock">Get Ready!</div>
   <canvas id="canvas"></canvas>
+  <script src="js/description.js"></script>
   <script src="js/pacmanAnimation.js"></script>
   <script src="js/input.js"></script>
 </body>
