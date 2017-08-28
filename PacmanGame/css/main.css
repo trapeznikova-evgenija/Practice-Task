@@ -28,7 +28,7 @@ body {
     margin-left: -42px;
 }
 
-#next_level {
+#nextLevelBlock {
     background-color: rgba(0, 120, 199, 0.7);
     width: 822px;
     height: 579px;
@@ -53,7 +53,7 @@ body {
     cursor: pointer;
 }
 
-#game_over_won {
+#gameOverWon {
     background-color: rgba(0, 120, 199, 0.7);
     width: 822px;
     height: 579px;
@@ -71,7 +71,7 @@ body {
 
 }
 
-#game_over_loser {
+#gameOverLoser {
     background-color: rgba(0, 120, 199, 0.7);
     width: 822px;
     height: 579px;
@@ -118,7 +118,7 @@ body {
     right: -2px;
 }
 
-#game_start {
+#gameStart {
     background-color: rgba(0, 120, 199, 0.7);
     width: 822px;
     height: 579px;
