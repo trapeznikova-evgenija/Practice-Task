@@ -1,14 +1,32 @@
-canvas {
+#canvas {
     border: 3px double black;
     display: none;
     margin: 0 auto;
-    margin-top: 20px;
+    margin-top: 5px;
+    float: left;
 }
 
 body {
     margin: 0;
     padding: 0;
     background: url("../image/background.jpg")
+}
+
+#blockOfLives {
+    background-color: black;
+    width: 30px;
+    height: 64px;
+    position: relative;
+    top: 45px;
+   /* z-index: 10000; */
+    display: none;
+    float: left;
+}
+
+.life {
+    background-image: url("../image/live.png");
+    width: 30px;
+    height: 32px;
 }
 
 #getReadyBlock {
@@ -23,8 +41,8 @@ body {
     bottom: 400px;
     z-index: 10000;
     text-align: center;
-    top: 50%;
-    left: 50%;
+    top: 47%;
+    left: 45%;
     margin-left: -42px;
 }
 
@@ -137,6 +155,12 @@ body {
     position: relative;
     width: 500px;
     margin: 0 auto;
+}
+
+#canvasWrapper {
+    margin: 0 auto;
+    position: absolute;
+    right: 32%;
 }
 
 #description {

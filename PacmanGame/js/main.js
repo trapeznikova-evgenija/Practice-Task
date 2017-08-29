@@ -1,29 +1,65 @@
 var CANVAS_WIDTH = 550;
-var CANVAS_HEIGHT = 620;
+var CANVAS_HEIGHT = 634;
+var fps = 30;
+var now;
+var then = Date.now();
+var interval = 1000 / fps;
+var delta;
 
-var DIRECTION_MAP = "image/mapPacman.png";
+var DIRECTION_MAP = "image/mapPacmanNew.png";
 var DIRECTION_FOOD = "image/food.png";
 var DIRECTION_SPRITE = "image/game_sprite.png";
 var DIRECTION_SPRITE_PACKMAN_RIGHT = "image/pacman_right.png";
 var DIRECTION_SPRITE_PACKMAN_LEFT = "image/pacman_left.png";
 
 var ENEMY_PICTURE_SIZE = 28;
-var PACMAN_PICTURE_SIZE = 23;
+var ENEMY_START_DX = 0;
+var ENEMY_START_DY = 0;
+var ENEMY_IMG_XONMAP = 0;
+var PACMAN_PICTURE_SIZE = 24;
 var PACMAN_SIZE_ON_MAP = 105;
 var SCORE_X = 40;
 var SCORE_Y = 24;
+var SIZE_SPRITE = 225;
+var PACMAN_START_X = 26;
+var PACMAN_START_Y = 50;
+var PACMAN_START_DX = 0;
+var PACMAN_START_DY = 0;
+var PACMAN_START_SCORE = 0;
+var PACMAN_FRAME_SPEED = 6;
+var PACMAN_END_FRAME = 4;
+var MAP_START_X = 0 ;
+var MAP_START_Y = 0;
+var SQUARE_MAP = 34;
+var X_HOME_LEFT = 157;
+var X_HOME_RIGHT = 395;
+var Y_HOME_RIGHT = 351;
+var Y_HOME_LEFT = 283;
+var BORDER_SIZE = 21;
+var BONUS_IMG_XONMAP = 197;
+var BONUS_IMG_YONMAP = 28;
 var SIZE_OF_BONUS_MEAL = 23;
 var MELON_PICTURE_HEIGHT = 18;
+var MELON_PICTURE_WIDTH = 23;
 var FOOD_PICTURE_SIZE = 28;
 var NUMBER_OF_ENEMIES = 4;
 var NUMBER_OF_LIVES = 3;
-var VICTORY_SCORE = 128;
+var VICTORY_SCORE = 169;
+var LEFT_BORDER_OF_RED = 1;
+var RIGHT_BORDER_OF_RED = 40;
+var LEFT_BORDER_OF_GREEN = 80;
+var RIGHT_BORDER_OF_GREEN = 120;
+var LEFT_BORDER_OF_BLUE = 180;
+var RIGHT_BORDER_OF_BLUE = 215;
 
 var gameStart = document.getElementById('gameStart');
 var gameEndWon = document.getElementById('gameOverWon');
 var gameEndLos = document.getElementById('gameOverLoser');
 var startButton = document.getElementById('startButton');
 var getReady = document.getElementById('getReadyBlock');
+var firstLife = document.getElementById('firstLife');
+var secondLife = document.getElementById('secondLife');
+var blockLives = document.getElementById('blockOfLives');
 
 var canvas;
 var context;
@@ -35,8 +71,20 @@ var counterScore = 0;
 var enemies = [];
 var lives = [];
 
+var haveFirstLife = true;
+var haveSecondLife = false;
+
 var game = new Game();
-var packman = new Packman(26, 51, 0, 0, 0, PACMAN_SIZE_ON_MAP, PACMAN_SIZE_ON_MAP, 6, 4, DIRECTION_SPRITE_PACKMAN_RIGHT);
+var packman = new Packman(PACMAN_START_X,
+                          PACMAN_START_Y,
+                          PACMAN_START_DX,
+                          PACMAN_START_DY,
+                          PACMAN_START_SCORE,
+                          PACMAN_SIZE_ON_MAP,
+                          PACMAN_SIZE_ON_MAP,
+                          PACMAN_FRAME_SPEED,
+                          PACMAN_END_FRAME,
+                          DIRECTION_SPRITE_PACKMAN_RIGHT);
 
 window.onload = function () {
 
@@ -47,29 +95,34 @@ window.onload = function () {
   canvas.height = CANVAS_HEIGHT;
 
   createStaticFood();
-  createObjectLive();
   startButton.addEventListener('click', game.startTheGame);
 
 };
 
 function animationTick() {
 
-  drawMap(DIRECTION_MAP, 0, 0);
-  drawFood(context, DIRECTION_FOOD, DIRECTION_SPRITE, setStrawberry, setMelon, packman);
-  drawScore(packman, context);
-  drawLive(DIRECTION_SPRITE_PACKMAN_RIGHT, context);
-  packman.redraw();
+  //now = Date.now();
+  //delta = now - then;
 
-  if (NUMBER_OF_ENEMIES === enemies.length) {
-    drawEnemy(enemies, DIRECTION_SPRITE);
-    getTheEnemiesMoving();
-  }
+ // if (delta > interval) {
+ //   then = now - (delta % interval);
 
-  addEventListener("keydown", packman.findDirection);
+    drawMap(DIRECTION_MAP, MAP_START_X, MAP_START_Y);
+    drawFood(context, DIRECTION_FOOD, DIRECTION_SPRITE, setStrawberry, setMelon, packman);
+    drawScore(packman, context);
+    packman.redraw();
+
+    if (NUMBER_OF_ENEMIES === enemies.length) {
+      drawEnemy(enemies, DIRECTION_SPRITE);
+      getTheEnemiesMoving();
+    }
+
+    addEventListener("keydown", packman.findDirection);
+  //}
 
   switch (game.curStatus) {
   case game.STATUS.PLAY:
-    window.requestAnimationFrame(animationTick);
+      window.requestAnimationFrame(animationTick);
     break;
   case game.STATUS.GAMEOVER:
     game.gameOverLos();
@@ -82,114 +135,28 @@ function animationTick() {
 }
 
 function drawScore(packman, context) {
-
-    context.beginPath();
-    context.fillStyle = "#505050";
-    context.font = 'bold 25px sans-serif';
-    context.fillText("Score " + packman._score, SCORE_X, SCORE_Y);
-    context.closePath();
-
+  context.beginPath();
+  context.fillStyle = "#505050";
+  context.font = 'bold 25px sans-serif';
+  context.fillText("Score " + packman._score, SCORE_X, SCORE_Y);
+  context.closePath();
 }
-
-function createObjectLive() {
-
-  var live;
-  for (var x = 450; x < canvas.width - 15; x += 20) {
-    live = new Live(x, 8);
-    lives.push(live);
-  }
-
-}
-
-function drawLive(liveFile, context) {
-
-  var liveImage = new Image();
-  liveImage.onload = function () {
-    for (var i = 0; i < NUMBER_OF_LIVES; i++) {
-      if (lives[i].xLive !== undefined && lives[i].yLive !== undefined) {
-        context.drawImage(liveImage, 0, 0, PACMAN_SIZE_ON_MAP, PACMAN_SIZE_ON_MAP, lives[i].xLive, lives[i].yLive, 17, 17);
-      }
-    }
-  };
-  liveImage.src = liveFile;
-
-}
-
-function drawBlackRect(context) {
-
-    context.beginPath();
-    context.fillStyle = 'black';
-    context.fillRect(450, 8, 17, 17);
-    context.stroke();
-
-}
-
 
 function createStaticFood() {
-
   var foodNumber;
 
-  for (var xYOne = 58; xYOne < canvas.width - 15; xYOne += 40) {
-    foodNumber = new StaticFood(xYOne, 51);
-    setMelon.push(foodNumber);
+  for (var y = PACMAN_START_Y; y < CANVAS_HEIGHT - BORDER_SIZE; y += SQUARE_MAP) {
+    for (var x = PACMAN_START_X - 2; x < CANVAS_WIDTH - BORDER_SIZE; x += SQUARE_MAP) {
+      if (!(((x > X_HOME_LEFT) && (x < X_HOME_RIGHT)) && ((y > Y_HOME_LEFT) && (y < Y_HOME_RIGHT)))
+        && !(((x > PACMAN_START_X - 4) && (x < PACMAN_START_X - 4 + SQUARE_MAP)) && ((y > PACMAN_START_Y - 6) && (y < PACMAN_START_Y - 6 + SQUARE_MAP)))
+        && !(((x > setStrawberry[1].x - 6) && (x < setStrawberry[1].x - 6 + SQUARE_MAP)) && ((y > setStrawberry[1].y) && (y < setStrawberry[1].y + SQUARE_MAP)))
+        && !(((x > setStrawberry[0].x) && (x < setStrawberry[0].x + SQUARE_MAP)) && ((y > setStrawberry[0].y) && (y < setStrawberry[0].y + SQUARE_MAP)))
+        && !(((x > setStrawberry[2].x) && (x < setStrawberry[2].x + SQUARE_MAP)) && ((y > setStrawberry[2].y) && (y < setStrawberry[2].y + SQUARE_MAP)))) {
+          foodNumber = new StaticFood(x, y);
+          setMelon.push(foodNumber);
+      }
+    }
   }
-
-  for (var xYTree = 28; xYTree < canvas.width - 50; xYTree += 40) {
-    foodNumber = new StaticFood(xYTree, 129);
-    setMelon.push(foodNumber);
-  }
-
-  for (var xYFour = 28; xYFour < canvas.width - 15; xYFour += 39) {
-    foodNumber = new StaticFood(xYFour, 182);
-    setMelon.push(foodNumber);
-  }
-
-  for (var xYFive = 25; xYFive < 100; xYFive += 38) {
-    foodNumber = new StaticFood(xYFive, 215);
-    setMelon.push(foodNumber);
-  }
-
-  for (var xYSix = 125; xYSix < 433; xYSix += 40) {
-    foodNumber = new StaticFood(xYSix, 245);
-    setMelon.push(foodNumber);
-  }
-
-  for (var xYSeven = 30; xYSeven < 120; xYSeven += 38) {
-    foodNumber = new StaticFood(xYSeven, 300);
-    setMelon.push(foodNumber);
-  }
-
-  for (var xYSevenPart = 412; xYSevenPart < canvas.width - 40; xYSevenPart += 38) {
-    foodNumber = new StaticFood(xYSevenPart, 300);
-    setMelon.push(foodNumber);
-  }
-
-  for (var xYEight = 180; xYEight < 370; xYEight += 40) {
-    foodNumber = new StaticFood(xYEight, 355);
-    setMelon.push(foodNumber);
-  }
-
-
-  for (var xYTen = 25; xYTen < canvas.width - 15; xYTen += 40) {
-    foodNumber = new StaticFood(xYTen, 415);
-    setMelon.push(foodNumber);
-  }
-
-  for (var xYEleven = 140; xYEleven < 410; xYEleven += 40) {
-    foodNumber = new StaticFood(xYEleven, 470);
-    setMelon.push(foodNumber);
-  }
-
-  for (var xYTwelve = 25; xYTwelve < 375; xYTwelve += 40) {
-    foodNumber = new StaticFood(xYTwelve, 528);
-    setMelon.push(foodNumber);
-  }
-
-  for (var xYThirtn = 25; xYThirtn < canvas.width - 15; xYThirtn += 40) {
-    foodNumber = new StaticFood(xYThirtn, 582);
-    setMelon.push(foodNumber);
-  }
-
 }
 
 function drawFood(context, foodFile, strawFile, setStraw, setMelon, packman) {
@@ -203,10 +170,10 @@ function drawFood(context, foodFile, strawFile, setStraw, setMelon, packman) {
            context.drawImage(imgFood, setMelon[k].xStatic, setMelon[k].yStatic)
          }
 
-         if (((packman._x + MELON_PICTURE_HEIGHT > setMelon[k].xStatic)
-           && (packman._x <= setMelon[k].xStatic + MELON_PICTURE_HEIGHT))
-           && ((packman._y + MELON_PICTURE_HEIGHT > setMelon[k].yStatic)
-           && (packman._y <= setMelon[k].yStatic + MELON_PICTURE_HEIGHT)))  {
+         if (((packman._x + PACMAN_PICTURE_SIZE > setMelon[k].xStatic)
+           && (packman._x <= setMelon[k].xStatic + MELON_PICTURE_WIDTH))
+           && ((packman._y + PACMAN_PICTURE_SIZE > setMelon[k].yStatic)
+           && (packman._y <= setMelon[k].yStatic + MELON_PICTURE_HEIGHT - 2)))  {
              delete setMelon[k].xStatic;
              counterScore++;
              delete setMelon[k].yStatic;
@@ -223,13 +190,13 @@ function drawFood(context, foodFile, strawFile, setStraw, setMelon, packman) {
   strawImage.onload = function () {
     for (var m = 0; m < setStraw.length; m++) {
       if ((setStraw[m].x !== undefined) && (setStraw[m].y !== undefined)) {
-        context.drawImage(strawImage, 196.875, 28.125, FOOD_PICTURE_SIZE, FOOD_PICTURE_SIZE, setStraw[m].x,
-                          setStraw[m].y, SIZE_OF_BONUS_MEAL, SIZE_OF_BONUS_MEAL);
+        context.drawImage(strawImage, BONUS_IMG_XONMAP, BONUS_IMG_YONMAP, FOOD_PICTURE_SIZE, FOOD_PICTURE_SIZE,
+          setStraw[m].x, setStraw[m].y, SIZE_OF_BONUS_MEAL, SIZE_OF_BONUS_MEAL);
 
-        if (((packman._x + MELON_PICTURE_HEIGHT > setStraw[m].x)
-          && (packman._x <= setStraw[m].x + MELON_PICTURE_HEIGHT))
-          && ((packman._y + MELON_PICTURE_HEIGHT > setStraw[m].y)
-          && (packman._y <= setStraw[m].y + MELON_PICTURE_HEIGHT)))  {
+        if (((packman._x + PACMAN_PICTURE_SIZE > setStraw[m].x)
+          && (packman._x <= setStraw[m].x + SIZE_OF_BONUS_MEAL))
+          && ((packman._y + PACMAN_PICTURE_SIZE > setStraw[m].y)
+          && (packman._y <= setStraw[m].y + SIZE_OF_BONUS_MEAL)))  {
             bonus = true;
             delete setStraw[m].x;
             counterScore++;
@@ -246,21 +213,18 @@ function drawFood(context, foodFile, strawFile, setStraw, setMelon, packman) {
 
 }
 
-function drawMap(mazeFile) {
-
+function drawMap(mazeFile, MAP_START_X, MAP_START_Y) {
   var imgMaze = new Image();
   imgMaze.onload = function () {
 
     canvas.width = imgMaze.width;
     canvas.height = imgMaze.height;
-    context.drawImage(imgMaze, 0, 0);
+    context.drawImage(imgMaze, MAP_START_X, MAP_START_Y);
   };
   imgMaze.src = mazeFile;
-
 }
 
 function drawEnemy(enemies, imgEnemy) {
-
   var enemyImage = new Image;
   enemyImage.onload = function () {
     for (var i = 0; i < NUMBER_OF_ENEMIES; i++) {
@@ -276,39 +240,31 @@ function drawEnemy(enemies, imgEnemy) {
     }
   };
   enemyImage.src = imgEnemy;
-
 }
 
 function getTheEnemiesMoving() {
-
   for (var g = 0; g < NUMBER_OF_ENEMIES; g++) {
-      enemies[g].mind();
-      enemies[g].findCondition();
+    enemies[g].mind();
+    enemies[g].findCondition();
   }
-
 }
 
 function createEnemy() {
-
   var enemyNumber;
 
-  for (var yOnMap = 112.5; yOnMap < 225; yOnMap += 28.125) {
-    enemyNumber = new Enemy(placeOfEnemy[0].x, placeOfEnemy[0].y, 0, yOnMap, 28, 28, 0, 0);
+  for (var yOnMap = 113; yOnMap < SIZE_SPRITE; yOnMap += ENEMY_PICTURE_SIZE) {
+    enemyNumber = new Enemy(placeOfEnemy[0].x, placeOfEnemy[0].y, ENEMY_IMG_XONMAP, yOnMap, ENEMY_PICTURE_SIZE, ENEMY_PICTURE_SIZE, ENEMY_START_DX, ENEMY_START_DY);
     enemies.push(enemyNumber);
   }
-
 }
 
 function randomInteger(min, max) {
-
   var rand = min + Math.random() * (max + 1 - min);
   rand = Math.floor(rand);
   return rand;
-
 }
 
 function checkCollisionsEnemy(enemyNumber, context) {
-
   var imageData = context.getImageData(enemyNumber._xEnemy, enemyNumber._yEnemy, ENEMY_PICTURE_SIZE + 1, ENEMY_PICTURE_SIZE + 1);
   var pixels = imageData.data;
 
@@ -317,16 +273,16 @@ function checkCollisionsEnemy(enemyNumber, context) {
     var green = pixels[i + 1];
     var blue = pixels[i + 2];
 
-    if (((red > 1) && (red < 20)) && ((green > 80) && (green < 120)) && ((blue > 180) && (blue < 215))) {
+    if (((red > LEFT_BORDER_OF_RED) && (red < RIGHT_BORDER_OF_RED))
+      && ((green > LEFT_BORDER_OF_GREEN) && (green < RIGHT_BORDER_OF_GREEN))
+      && ((blue > LEFT_BORDER_OF_BLUE) && (blue < RIGHT_BORDER_OF_BLUE))) {
       return true;
     }
   }
   return false;
-
 }
 
 function checkCollisions(packman, context) {
-
   var imageData = context.getImageData(packman._x, packman._y, PACMAN_PICTURE_SIZE, PACMAN_PICTURE_SIZE);
   var pixels = imageData.data;
 
@@ -335,17 +291,17 @@ function checkCollisions(packman, context) {
     var green = pixels[i + 1];
     var blue = pixels[i + 2];
 
-    if (((red > 1) && (red < 20)) && ((green > 80) && (green < 120)) && ((blue > 180) && (blue < 215)))  {
-      return true;
+    if (((red > LEFT_BORDER_OF_RED) && (red < RIGHT_BORDER_OF_RED))
+      && ((green > LEFT_BORDER_OF_GREEN) && (green < RIGHT_BORDER_OF_GREEN))
+      && ((blue > LEFT_BORDER_OF_BLUE) && (blue < RIGHT_BORDER_OF_BLUE))) {
+        return true;
     }
   }
   return false;
-
 }
 
 function checkCollisionsFood(food, context) {
-
-  var imageData = context.getImageData(food.xStatic, food.yStatic, 23, 18);
+  var imageData = context.getImageData(food.xStatic, food.yStatic, SIZE_OF_BONUS_MEAL, MELON_PICTURE_HEIGHT);
   var pixels = imageData.data;
 
   for (var i = 0; n = pixels.length, i < n; i += 4) {
@@ -358,7 +314,6 @@ function checkCollisionsFood(food, context) {
     }
   }
   return false;
-
 }
 
 function Game() {
@@ -378,6 +333,7 @@ function Game() {
     canvas.style.display = 'block';
     game.curStatus = 0;
     getReady.style.display = 'block';
+    blockLives.style.display = 'block';
 
     setTimeout(createEnemy, 2000);
 
@@ -415,17 +371,8 @@ function Game() {
 }
 
 function StaticFood(x, y) {
-
   this.xStatic = x;
   this.yStatic = y;
-
-}
-
-function Live(x, y) {
-
-  this.xLive = x;
-  this.yLive = y;
-
 }
 
 function Packman(x, y, dx, dy, score, frameWidth, frameHeight, frameSpeed, endFrame, path) {
@@ -620,11 +567,18 @@ function Enemy(x, y, xOnMap, yOnMap, sizeWidth, sizeHeight, dx, dy) {
 
   this.findCondition = function () {
 
-    if (((this._xEnemy + ENEMY_PICTURE_SIZE > packman._x) && (this._xEnemy <= packman._x + PACMAN_PICTURE_SIZE))
-      && ((this._yEnemy + ENEMY_PICTURE_SIZE > packman._y) && (this._yEnemy <= packman._y + PACMAN_PICTURE_SIZE))
+    if ((((this._xEnemy + ENEMY_PICTURE_SIZE > packman._x) && (this._xEnemy <= packman._x + PACMAN_PICTURE_SIZE))
+      && ((this._yEnemy + ENEMY_PICTURE_SIZE > packman._y) && (this._yEnemy <= packman._y + PACMAN_PICTURE_SIZE)))
       && !(bonus)) {
       loadFile("sound/pacmanDeath.wav");
-      game.curStatus = 2;
+      if (haveFirstLife) {
+        firstLife.style.display = 'none';
+        haveSecondLife = true;
+      }
+      if (haveSecondLife) {
+        secondLife.style.display = 'none';
+      }
+      //game.curStatus = 2;
     } else if (((this._xEnemy + ENEMY_PICTURE_SIZE > packman._x) && (this._xEnemy <= packman._x + PACMAN_PICTURE_SIZE))
       && ((this._yEnemy + ENEMY_PICTURE_SIZE > packman._y) && (this._yEnemy <= packman._y + PACMAN_PICTURE_SIZE))
       && (bonus)) {
